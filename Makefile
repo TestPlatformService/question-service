@@ -17,9 +17,7 @@ mig-force:
 	migrate -path migrations -database '${PDB_URL}' -verbose force 1
 
 create_mig:
-	@echo "Enter file name: "; \
-	read filename; \
-	migrate create -ext sql -dir migrations -seq $$filename
+	migrate create -ext sql -dir migrations -seq create_table
 swag:
 	~/go/bin/swag init -g ./api/router.go -o api/docs
 run:
