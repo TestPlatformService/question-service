@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"question/config"
-	"question/logs"
 	"question/storage"
 
 	_ "github.com/lib/pq"
@@ -39,9 +38,8 @@ func (p *postgresStorage) Close() {
 	p.db.Close()
 }
 
-
 func (p *postgresStorage) Subject() storage.ISubjectStorage {
-	return NewGroupRepo(p.db, logs.NewLogger())
+	return NewSubjectRepo(p.db)
 }
 
 func NewIstorage(db *sql.DB) storage.IStorage {
