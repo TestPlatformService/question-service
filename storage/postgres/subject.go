@@ -41,6 +41,37 @@ func (s *subjectRepo) GetSubject(ctx context.Context, req *pb.GetSubjectRequest)
 	return &subject, nil
 }
 
+
+func (s *subjectRepo) GetAllSubjects(ctx context.Context, req *pb.GetAllSubjectsRequest) (*pb.GetAllSubjectsResponse, error) {
+	query := `SELECT id, name, description, created_at, updated_at FROM subjects WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2`
+	rows, err := s.DB.QueryContext(ctx, query, req.Limit, req.Offset)
+	if err != nil {
+		s.Log.Error("failed to get all subjects", "error", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var subjects []*pb.GetAll
+	for rows.Next() {
+		var subject pb.GetAll
+		if err := rows.Scan(&subject.Id, &subject.Name, &subject.Description); err != nil {
+			s.Log.Error("failed to scan subject row", "error", err)
+			return nil, err
+		}
+		subjects = append(subjects, &subject)
+	}
+
+	if err = rows.Err(); err != nil {
+		s.Log.Error("error during rows iteration", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetAllSubjectsResponse{
+		Subjects: subjects,
+	}, nil
+}
+
+
 func (s *subjectRepo) UpdateSubject(ctx context.Context, req *pb.UpdateSubjectRequest) (*pb.Void, error) {
 	query := `UPDATE subjects SET name = $1, description = $2, updated_at = $3 WHERE id = $4 and deleted_at IS NULL`
 	_, err := s.DB.ExecContext(ctx, query, req.Name, req.Description, time.Now(), req.Id)

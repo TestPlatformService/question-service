@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	SubjectService_CreateSubject_FullMethodName = "/subject.SubjectService/CreateSubject"
-	SubjectService_GetSubject_FullMethodName    = "/subject.SubjectService/GetSubject"
-	SubjectService_UpdateSubject_FullMethodName = "/subject.SubjectService/UpdateSubject"
-	SubjectService_DeleteSubject_FullMethodName = "/subject.SubjectService/DeleteSubject"
+	SubjectService_CreateSubject_FullMethodName  = "/subject.SubjectService/CreateSubject"
+	SubjectService_GetSubject_FullMethodName     = "/subject.SubjectService/GetSubject"
+	SubjectService_GetAllSubjects_FullMethodName = "/subject.SubjectService/GetAllSubjects"
+	SubjectService_UpdateSubject_FullMethodName  = "/subject.SubjectService/UpdateSubject"
+	SubjectService_DeleteSubject_FullMethodName  = "/subject.SubjectService/DeleteSubject"
 )
 
 // SubjectServiceClient is the client API for SubjectService service.
@@ -31,6 +32,7 @@ const (
 type SubjectServiceClient interface {
 	CreateSubject(ctx context.Context, in *CreateSubjectRequest, opts ...grpc.CallOption) (*Void, error)
 	GetSubject(ctx context.Context, in *GetSubjectRequest, opts ...grpc.CallOption) (*GetSubjectResponse, error)
+	GetAllSubjects(ctx context.Context, in *GetAllSubjectsRequest, opts ...grpc.CallOption) (*GetAllSubjectsResponse, error)
 	UpdateSubject(ctx context.Context, in *UpdateSubjectRequest, opts ...grpc.CallOption) (*Void, error)
 	DeleteSubject(ctx context.Context, in *DeleteSubjectRequest, opts ...grpc.CallOption) (*Void, error)
 }
@@ -63,6 +65,16 @@ func (c *subjectServiceClient) GetSubject(ctx context.Context, in *GetSubjectReq
 	return out, nil
 }
 
+func (c *subjectServiceClient) GetAllSubjects(ctx context.Context, in *GetAllSubjectsRequest, opts ...grpc.CallOption) (*GetAllSubjectsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllSubjectsResponse)
+	err := c.cc.Invoke(ctx, SubjectService_GetAllSubjects_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *subjectServiceClient) UpdateSubject(ctx context.Context, in *UpdateSubjectRequest, opts ...grpc.CallOption) (*Void, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Void)
@@ -89,6 +101,7 @@ func (c *subjectServiceClient) DeleteSubject(ctx context.Context, in *DeleteSubj
 type SubjectServiceServer interface {
 	CreateSubject(context.Context, *CreateSubjectRequest) (*Void, error)
 	GetSubject(context.Context, *GetSubjectRequest) (*GetSubjectResponse, error)
+	GetAllSubjects(context.Context, *GetAllSubjectsRequest) (*GetAllSubjectsResponse, error)
 	UpdateSubject(context.Context, *UpdateSubjectRequest) (*Void, error)
 	DeleteSubject(context.Context, *DeleteSubjectRequest) (*Void, error)
 	mustEmbedUnimplementedSubjectServiceServer()
@@ -103,6 +116,9 @@ func (UnimplementedSubjectServiceServer) CreateSubject(context.Context, *CreateS
 }
 func (UnimplementedSubjectServiceServer) GetSubject(context.Context, *GetSubjectRequest) (*GetSubjectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSubject not implemented")
+}
+func (UnimplementedSubjectServiceServer) GetAllSubjects(context.Context, *GetAllSubjectsRequest) (*GetAllSubjectsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllSubjects not implemented")
 }
 func (UnimplementedSubjectServiceServer) UpdateSubject(context.Context, *UpdateSubjectRequest) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateSubject not implemented")
@@ -159,6 +175,24 @@ func _SubjectService_GetSubject_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SubjectService_GetAllSubjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllSubjectsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubjectServiceServer).GetAllSubjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SubjectService_GetAllSubjects_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubjectServiceServer).GetAllSubjects(ctx, req.(*GetAllSubjectsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SubjectService_UpdateSubject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateSubjectRequest)
 	if err := dec(in); err != nil {
@@ -209,6 +243,10 @@ var SubjectService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSubject",
 			Handler:    _SubjectService_GetSubject_Handler,
+		},
+		{
+			MethodName: "GetAllSubjects",
+			Handler:    _SubjectService_GetAllSubjects_Handler,
 		},
 		{
 			MethodName: "UpdateSubject",
