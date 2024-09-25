@@ -30,7 +30,7 @@ func (s *subjectRepo) CreateSubject(ctx context.Context, req *pb.CreateSubjectRe
 }
 
 func (s *subjectRepo) GetSubject(ctx context.Context, req *pb.GetSubjectRequest) (*pb.GetSubjectResponse, error) {
-	query := `SELECT * FROM subjects WHERE id = $1`
+	query := `SELECT id, name, description, created_at, updated_at FROM subjects WHERE id = $1 and deleted_at IS NULL`
 	row := s.DB.QueryRowContext(ctx, query, req.Id)
 	var subject pb.GetSubjectResponse
 	err := row.Scan(&subject.Id, &subject.Name, &subject.Description, &subject.CreatedAt, &subject.UpdatedAt)
@@ -42,7 +42,7 @@ func (s *subjectRepo) GetSubject(ctx context.Context, req *pb.GetSubjectRequest)
 }
 
 func (s *subjectRepo) UpdateSubject(ctx context.Context, req *pb.UpdateSubjectRequest) (*pb.Void, error) {
-	query := `UPDATE subjects SET name = $1, description = $2, updated_at = $3 WHERE id = $4`
+	query := `UPDATE subjects SET name = $1, description = $2, updated_at = $3 WHERE id = $4 and deleted_at IS NULL`
 	_, err := s.DB.ExecContext(ctx, query, req.Name, req.Description, time.Now(), req.Id)
 	if err != nil {
 		s.Log.Error("failed to update subject", "error", err)
@@ -52,8 +52,8 @@ func (s *subjectRepo) UpdateSubject(ctx context.Context, req *pb.UpdateSubjectRe
 }
 
 func (s *subjectRepo) DeleteSubject(ctx context.Context, req *pb.DeleteSubjectRequest) (*pb.Void, error) {
-	query := `DELETE FROM subjects WHERE id = $1`
-	_, err := s.DB.ExecContext(ctx, query, req.Id)
+	query := `UPDATE subjects SET deleted_at = $1 WHERE id = $2 and deleted_at IS NULL`
+	_, err := s.DB.ExecContext(ctx, query, time.Now(), req.Id)
 	if err != nil {
 		s.Log.Error("failed to delete subject", "error", err)
 		return nil, err
