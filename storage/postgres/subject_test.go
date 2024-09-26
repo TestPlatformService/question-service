@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	pb "question/genproto/subject"
 	"testing"
 
@@ -17,8 +18,8 @@ func TestCreateSubject(t *testing.T) {
 
 	repo := NewSubjectRepo(db)
 	req := &pb.CreateSubjectRequest{
-		Name:        "Foundation",
-		Description: "Is beginning of programming",
+		Name:        ".Net",
+		Description: "It is web proggramming",
 	}
 
 	_, err = repo.CreateSubject(context.Background(), req)
@@ -46,6 +47,28 @@ func TestGetSubject(t *testing.T) {
 	}
 
 	assert.NotEmpty(t, res)
+}
+
+func TestGetAllSubjects(t *testing.T) {
+	db, err := ConnectDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+
+	repo := NewSubjectRepo(db)
+
+	req := &pb.GetAllSubjectsRequest{
+		Limit: 2,
+		Offset: 1,
+	}
+
+	res, err := repo.GetAllSubjects(context.Background(), req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Println(res)
 }
 
 func TestUpdateSubject(t *testing.T) {

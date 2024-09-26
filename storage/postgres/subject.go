@@ -43,7 +43,7 @@ func (s *subjectRepo) GetSubject(ctx context.Context, req *pb.GetSubjectRequest)
 
 
 func (s *subjectRepo) GetAllSubjects(ctx context.Context, req *pb.GetAllSubjectsRequest) (*pb.GetAllSubjectsResponse, error) {
-	query := `SELECT id, name, description, created_at, updated_at FROM subjects WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2`
+	query := `SELECT id, name, description FROM subjects WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2`
 	rows, err := s.DB.QueryContext(ctx, query, req.Limit, req.Offset)
 	if err != nil {
 		s.Log.Error("failed to get all subjects", "error", err)
