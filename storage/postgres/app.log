@@ -1,3 +1,7 @@
 time=2024-09-25T15:12:11.106+05:00 level=ERROR msg="failed to get subject" error="sql: expected 6 destination arguments in Scan, not 5"
+<<<<<<< HEAD
 time=2024-09-25T18:18:34.378+05:00 level=ERROR msg="pq: syntax error at or near \"subject_id\""
 time=2024-09-25T18:20:12.350+05:00 level=ERROR msg="sql: expected 4 destination arguments in Scan, not 1"
+=======
+time=2024-09-25T18:20:06.397+05:00 level=ERROR msg="failed to scan subject row" error="sql: expected 5 destination arguments in Scan, not 3"
+>>>>>>> origin/main
