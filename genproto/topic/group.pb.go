@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.34.2
 // 	protoc        v3.12.4
-// source: topic.proto
+// source: group.proto
 
 package topic
 
@@ -33,7 +33,7 @@ type CreateTopicReq struct {
 func (x *CreateTopicReq) Reset() {
 	*x = CreateTopicReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[0]
+		mi := &file_group_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -46,7 +46,7 @@ func (x *CreateTopicReq) String() string {
 func (*CreateTopicReq) ProtoMessage() {}
 
 func (x *CreateTopicReq) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[0]
+	mi := &file_group_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +59,7 @@ func (x *CreateTopicReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTopicReq.ProtoReflect.Descriptor instead.
 func (*CreateTopicReq) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{0}
+	return file_group_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CreateTopicReq) GetSubjectId() string {
@@ -95,7 +95,7 @@ type CreateTopicResp struct {
 func (x *CreateTopicResp) Reset() {
 	*x = CreateTopicResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[1]
+		mi := &file_group_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -108,7 +108,7 @@ func (x *CreateTopicResp) String() string {
 func (*CreateTopicResp) ProtoMessage() {}
 
 func (x *CreateTopicResp) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[1]
+	mi := &file_group_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -121,7 +121,7 @@ func (x *CreateTopicResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTopicResp.ProtoReflect.Descriptor instead.
 func (*CreateTopicResp) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{1}
+	return file_group_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateTopicResp) GetId() string {
@@ -152,7 +152,7 @@ type UpdateTopicReq struct {
 func (x *UpdateTopicReq) Reset() {
 	*x = UpdateTopicReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[2]
+		mi := &file_group_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -165,7 +165,7 @@ func (x *UpdateTopicReq) String() string {
 func (*UpdateTopicReq) ProtoMessage() {}
 
 func (x *UpdateTopicReq) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[2]
+	mi := &file_group_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -178,7 +178,7 @@ func (x *UpdateTopicReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTopicReq.ProtoReflect.Descriptor instead.
 func (*UpdateTopicReq) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{2}
+	return file_group_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UpdateTopicReq) GetId() string {
@@ -221,7 +221,7 @@ type UpdateTopicResp struct {
 func (x *UpdateTopicResp) Reset() {
 	*x = UpdateTopicResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[3]
+		mi := &file_group_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -234,7 +234,7 @@ func (x *UpdateTopicResp) String() string {
 func (*UpdateTopicResp) ProtoMessage() {}
 
 func (x *UpdateTopicResp) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[3]
+	mi := &file_group_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -247,7 +247,7 @@ func (x *UpdateTopicResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTopicResp.ProtoReflect.Descriptor instead.
 func (*UpdateTopicResp) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{3}
+	return file_group_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UpdateTopicResp) GetId() string {
@@ -275,7 +275,7 @@ type DeleteTopicReq struct {
 func (x *DeleteTopicReq) Reset() {
 	*x = DeleteTopicReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[4]
+		mi := &file_group_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -288,7 +288,7 @@ func (x *DeleteTopicReq) String() string {
 func (*DeleteTopicReq) ProtoMessage() {}
 
 func (x *DeleteTopicReq) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[4]
+	mi := &file_group_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -301,7 +301,7 @@ func (x *DeleteTopicReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTopicReq.ProtoReflect.Descriptor instead.
 func (*DeleteTopicReq) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{4}
+	return file_group_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DeleteTopicReq) GetTopicId() string {
@@ -322,7 +322,7 @@ type DeleteTopicResp struct {
 func (x *DeleteTopicResp) Reset() {
 	*x = DeleteTopicResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[5]
+		mi := &file_group_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -335,7 +335,7 @@ func (x *DeleteTopicResp) String() string {
 func (*DeleteTopicResp) ProtoMessage() {}
 
 func (x *DeleteTopicResp) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[5]
+	mi := &file_group_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -348,7 +348,7 @@ func (x *DeleteTopicResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTopicResp.ProtoReflect.Descriptor instead.
 func (*DeleteTopicResp) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{5}
+	return file_group_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DeleteTopicResp) GetStatus() string {
@@ -369,7 +369,7 @@ type GetAllFilter struct {
 func (x *GetAllFilter) Reset() {
 	*x = GetAllFilter{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[6]
+		mi := &file_group_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -382,7 +382,7 @@ func (x *GetAllFilter) String() string {
 func (*GetAllFilter) ProtoMessage() {}
 
 func (x *GetAllFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[6]
+	mi := &file_group_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -395,7 +395,7 @@ func (x *GetAllFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllFilter.ProtoReflect.Descriptor instead.
 func (*GetAllFilter) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{6}
+	return file_group_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetAllFilter) GetSubjectId() string {
@@ -418,7 +418,7 @@ type GetAllTopicsReq struct {
 func (x *GetAllTopicsReq) Reset() {
 	*x = GetAllTopicsReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[7]
+		mi := &file_group_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -431,7 +431,7 @@ func (x *GetAllTopicsReq) String() string {
 func (*GetAllTopicsReq) ProtoMessage() {}
 
 func (x *GetAllTopicsReq) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[7]
+	mi := &file_group_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -444,7 +444,7 @@ func (x *GetAllTopicsReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllTopicsReq.ProtoReflect.Descriptor instead.
 func (*GetAllTopicsReq) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{7}
+	return file_group_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetAllTopicsReq) GetSubjectId() string {
@@ -483,7 +483,7 @@ type Topic struct {
 func (x *Topic) Reset() {
 	*x = Topic{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[8]
+		mi := &file_group_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -496,7 +496,7 @@ func (x *Topic) String() string {
 func (*Topic) ProtoMessage() {}
 
 func (x *Topic) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[8]
+	mi := &file_group_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -509,7 +509,7 @@ func (x *Topic) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Topic.ProtoReflect.Descriptor instead.
 func (*Topic) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{8}
+	return file_group_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Topic) GetId() string {
@@ -560,7 +560,7 @@ type GetAllTopicsResp struct {
 func (x *GetAllTopicsResp) Reset() {
 	*x = GetAllTopicsResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topic_proto_msgTypes[9]
+		mi := &file_group_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -573,7 +573,7 @@ func (x *GetAllTopicsResp) String() string {
 func (*GetAllTopicsResp) ProtoMessage() {}
 
 func (x *GetAllTopicsResp) ProtoReflect() protoreflect.Message {
-	mi := &file_topic_proto_msgTypes[9]
+	mi := &file_group_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -586,7 +586,7 @@ func (x *GetAllTopicsResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllTopicsResp.ProtoReflect.Descriptor instead.
 func (*GetAllTopicsResp) Descriptor() ([]byte, []int) {
-	return file_topic_proto_rawDescGZIP(), []int{9}
+	return file_group_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetAllTopicsResp) GetTopics() []*Topic {
@@ -610,10 +610,10 @@ func (x *GetAllTopicsResp) GetOffset() int32 {
 	return 0
 }
 
-var File_topic_proto protoreflect.FileDescriptor
+var File_group_proto protoreflect.FileDescriptor
 
-var file_topic_proto_rawDesc = []byte{
-	0x0a, 0x0b, 0x74, 0x6f, 0x70, 0x69, 0x63, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x74,
+var file_group_proto_rawDesc = []byte{
+	0x0a, 0x0b, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x74,
 	0x6f, 0x70, 0x69, 0x63, 0x22, 0x65, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f,
 	0x70, 0x69, 0x63, 0x52, 0x65, 0x71, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63,
 	0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x75, 0x62, 0x6a,
@@ -688,19 +688,19 @@ var file_topic_proto_rawDesc = []byte{
 }
 
 var (
-	file_topic_proto_rawDescOnce sync.Once
-	file_topic_proto_rawDescData = file_topic_proto_rawDesc
+	file_group_proto_rawDescOnce sync.Once
+	file_group_proto_rawDescData = file_group_proto_rawDesc
 )
 
-func file_topic_proto_rawDescGZIP() []byte {
-	file_topic_proto_rawDescOnce.Do(func() {
-		file_topic_proto_rawDescData = protoimpl.X.CompressGZIP(file_topic_proto_rawDescData)
+func file_group_proto_rawDescGZIP() []byte {
+	file_group_proto_rawDescOnce.Do(func() {
+		file_group_proto_rawDescData = protoimpl.X.CompressGZIP(file_group_proto_rawDescData)
 	})
-	return file_topic_proto_rawDescData
+	return file_group_proto_rawDescData
 }
 
-var file_topic_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
-var file_topic_proto_goTypes = []any{
+var file_group_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_group_proto_goTypes = []any{
 	(*CreateTopicReq)(nil),   // 0: topic.CreateTopicReq
 	(*CreateTopicResp)(nil),  // 1: topic.CreateTopicResp
 	(*UpdateTopicReq)(nil),   // 2: topic.UpdateTopicReq
@@ -712,7 +712,7 @@ var file_topic_proto_goTypes = []any{
 	(*Topic)(nil),            // 8: topic.Topic
 	(*GetAllTopicsResp)(nil), // 9: topic.GetAllTopicsResp
 }
-var file_topic_proto_depIdxs = []int32{
+var file_group_proto_depIdxs = []int32{
 	8, // 0: topic.GetAllTopicsResp.topics:type_name -> topic.Topic
 	0, // 1: topic.TopicService.CreateTopic:input_type -> topic.CreateTopicReq
 	2, // 2: topic.TopicService.UpdateTopic:input_type -> topic.UpdateTopicReq
@@ -729,13 +729,13 @@ var file_topic_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_topic_proto_init() }
-func file_topic_proto_init() {
-	if File_topic_proto != nil {
+func init() { file_group_proto_init() }
+func file_group_proto_init() {
+	if File_group_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_topic_proto_msgTypes[0].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[0].Exporter = func(v any, i int) any {
 			switch v := v.(*CreateTopicReq); i {
 			case 0:
 				return &v.state
@@ -747,7 +747,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[1].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[1].Exporter = func(v any, i int) any {
 			switch v := v.(*CreateTopicResp); i {
 			case 0:
 				return &v.state
@@ -759,7 +759,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[2].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[2].Exporter = func(v any, i int) any {
 			switch v := v.(*UpdateTopicReq); i {
 			case 0:
 				return &v.state
@@ -771,7 +771,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[3].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[3].Exporter = func(v any, i int) any {
 			switch v := v.(*UpdateTopicResp); i {
 			case 0:
 				return &v.state
@@ -783,7 +783,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[4].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[4].Exporter = func(v any, i int) any {
 			switch v := v.(*DeleteTopicReq); i {
 			case 0:
 				return &v.state
@@ -795,7 +795,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[5].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[5].Exporter = func(v any, i int) any {
 			switch v := v.(*DeleteTopicResp); i {
 			case 0:
 				return &v.state
@@ -807,7 +807,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[6].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[6].Exporter = func(v any, i int) any {
 			switch v := v.(*GetAllFilter); i {
 			case 0:
 				return &v.state
@@ -819,7 +819,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[7].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[7].Exporter = func(v any, i int) any {
 			switch v := v.(*GetAllTopicsReq); i {
 			case 0:
 				return &v.state
@@ -831,7 +831,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[8].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[8].Exporter = func(v any, i int) any {
 			switch v := v.(*Topic); i {
 			case 0:
 				return &v.state
@@ -843,7 +843,7 @@ func file_topic_proto_init() {
 				return nil
 			}
 		}
-		file_topic_proto_msgTypes[9].Exporter = func(v any, i int) any {
+		file_group_proto_msgTypes[9].Exporter = func(v any, i int) any {
 			switch v := v.(*GetAllTopicsResp); i {
 			case 0:
 				return &v.state
@@ -860,18 +860,18 @@ func file_topic_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_topic_proto_rawDesc,
+			RawDescriptor: file_group_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_topic_proto_goTypes,
-		DependencyIndexes: file_topic_proto_depIdxs,
-		MessageInfos:      file_topic_proto_msgTypes,
+		GoTypes:           file_group_proto_goTypes,
+		DependencyIndexes: file_group_proto_depIdxs,
+		MessageInfos:      file_group_proto_msgTypes,
 	}.Build()
-	File_topic_proto = out.File
-	file_topic_proto_rawDesc = nil
-	file_topic_proto_goTypes = nil
-	file_topic_proto_depIdxs = nil
+	File_group_proto = out.File
+	file_group_proto_rawDesc = nil
+	file_group_proto_goTypes = nil
+	file_group_proto_depIdxs = nil
 }

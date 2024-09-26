@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.4.0
 // - protoc             v3.12.4
-// source: topic.proto
+// source: group.proto
 
 package topic
 
@@ -220,5 +220,5 @@ var TopicService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "topic.proto",
+	Metadata: "group.proto",
 }
