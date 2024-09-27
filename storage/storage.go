@@ -1,28 +1,29 @@
 package storage
 
 import (
-	"context"
-	pb "question/genproto/subject"
-	pb2 "question/genproto/topic"
+	"database/sql"
+	"question/storage/mongosh"
+	"question/storage/repo"
+
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type IStorage interface {
-	Subject() ISubjectStorage
-	Topic() ITopicStorage
-	Close()
+type Istorage interface {
+	Question() repo.IQuestionStorage
 }
 
-type ISubjectStorage interface {
-	CreateSubject(context.Context, *pb.CreateSubjectRequest) (*pb.Void, error)
-	GetSubject(context.Context, *pb.GetSubjectRequest) (*pb.GetSubjectResponse, error)
-	GetAllSubjects(context.Context, *pb.GetAllSubjectsRequest) (*pb.GetAllSubjectsResponse, error)
-	UpdateSubject(context.Context, *pb.UpdateSubjectRequest) (*pb.Void, error)
-	DeleteSubject(context.Context, *pb.DeleteSubjectRequest) (*pb.Void, error)
+type StoragePro struct {
+	Mdb *mongo.Database
+	PDB *sql.DB
 }
 
-type ITopicStorage interface {
-	CreateTopic(req *pb2.CreateTopicReq) (*pb2.CreateTopicResp, error)
-	UpdateTopic(req *pb2.UpdateTopicReq)(*pb2.UpdateTopicResp, error)
-	DeleteTopic(req *pb2.DeleteTopicReq)(*pb2.DeleteTopicResp, error)
-	GetAllTopics(req *pb2.GetAllTopicsReq)(*pb2.GetAllTopicsResp, error)
+func NewStoragePro(mdb *mongo.Database, pdb *sql.DB) Istorage {
+	return &StoragePro{
+		Mdb: mdb,
+		PDB: pdb,
+	}
+}
+
+func (pro *StoragePro) Question() repo.IQuestionStorage {
+	return mongosh.NewQuestionRepository(pro.Mdb)
 }

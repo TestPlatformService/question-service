@@ -1,12 +1,12 @@
 package postgres
 
 import (
-	pb "question/genproto/subject"
 	"context"
 	"database/sql"
 	"log/slog"
+	pb "question/genproto/subject"
 	"question/logs"
-	"question/storage"
+	"question/storage/repo"
 	"time"
 )
 
@@ -15,7 +15,7 @@ type subjectRepo struct {
 	Log *slog.Logger
 }
 
-func NewSubjectRepo(DB *sql.DB) storage.ISubjectStorage {
+func NewSubjectRepo(DB *sql.DB) repo.ISubjectStorage {
 	return &subjectRepo{DB: DB, Log: logs.NewLogger()}
 }
 
@@ -89,4 +89,3 @@ func (s *subjectRepo) DeleteSubject(ctx context.Context, req *pb.DeleteSubjectRe
 	}
 	return &pb.Void{}, nil
 }
-	

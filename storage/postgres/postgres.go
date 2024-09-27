@@ -4,17 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"log/slog"
 	"question/config"
-	"question/storage"
 
 	_ "github.com/lib/pq"
 )
-
-type postgresStorage struct {
-	db *sql.DB
-	logger *slog.Logger
-}
 
 func ConnectDB() (*sql.DB, error) {
 
@@ -34,23 +27,4 @@ func ConnectDB() (*sql.DB, error) {
 	}
 
 	return db, nil
-}
-
-func (p *postgresStorage) Close() {
-	p.db.Close()
-}
-
-func (p *postgresStorage) Subject() storage.ISubjectStorage {
-	return NewSubjectRepo(p.db)
-}
-
-func (p *postgresStorage) Topic() storage.ITopicStorage{
-	return NewTopicRepo(p.db, p.logger)
-}
-
-func NewIstorage(db *sql.DB, logger *slog.Logger) storage.IStorage {
-	return &postgresStorage{
-		db: db,
-		logger: logger,
-	}
 }

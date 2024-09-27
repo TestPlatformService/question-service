@@ -3,6 +3,7 @@ package mongosh
 import (
 	"context"
 	pb "question/genproto/question"
+	"question/storage/repo"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -30,7 +31,7 @@ type QuestionRepository struct {
 	Coll *mongo.Collection
 }
 
-func NewQuestionRepository(db *mongo.Database) *QuestionRepository {
+func NewQuestionRepository(db *mongo.Database) repo.IQuestionStorage {
 	return &QuestionRepository{Coll: db.Collection("question")}
 }
 
@@ -171,7 +172,7 @@ func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.Upda
 func (repo *QuestionRepository) DeleteQuestion(ctx context.Context, req *pb.DeleteQuestionRequest) (*pb.Void, error) {
 	update := bson.M{
 		"$set": bson.M{
-			"deleted_at": time.Now(), // Soft delete by setting the DeletedAt field
+			"deleted_at": time.Now(),
 		},
 	}
 
@@ -210,6 +211,24 @@ func (repo *QuestionRepository) DeleteImageQuestion(ctx context.Context, req *pb
 	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.QuestionId, "deleted_at": bson.M{"$exists": false}}, update)
 	if err != nil {
 		return nil, err
+	}
+
+	return &pb.Void{}, nil
+}
+
+func (repo *QuestionRepository) IsQuestionExist(ctx context.Context, id *pb.QuestionId) (*pb.Void, error) {
+	filter := bson.M{
+		"_id":        id.Id,
+		"deleted_at": bson.M{"$exists": false},
+	}
+
+	count, err := repo.Coll.CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	if count == 0 {
+		return nil, mongo.ErrNoDocuments
 	}
 
 	return &pb.Void{}, nil
