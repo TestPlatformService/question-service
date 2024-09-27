@@ -22,6 +22,8 @@ type Question struct {
 	Description string             `bson:"description"`
 	Image       string             `bson:"image"`
 	Constraints string             `bson:"constrains"`
+	InputInfo   string             `bson:"input_info"`
+	OutputInfo  string             `bson:"output_info"`
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 	DeletedAt   *time.Time         `bson:"deleted_at,omitempty"`
@@ -45,6 +47,8 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 		Description: req.Description,
 		Image:       req.Image,
 		Constraints: req.Constrains,
+		InputInfo:   req.InputInfo,
+		OutputInfo:  req.OutputInfo,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -69,6 +73,7 @@ func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.Question
 	}
 
 	return &pb.GetQuestionResponse{
+		Id:          question.ID.Hex(),
 		TopicId:     question.TopicID,
 		Type:        question.Type,
 		Name:        question.Name,
@@ -77,6 +82,10 @@ func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.Question
 		Description: question.Description,
 		Image:       question.Image,
 		Constrains:  question.Constraints,
+		InputInfo:   question.InputInfo,
+		OutputInfo:  question.OutputInfo,
+		CreatedAt:   question.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:   question.UpdatedAt.Format(time.RFC3339),
 	}, nil
 }
 
@@ -127,6 +136,7 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 		}
 
 		questions = append(questions, &pb.GetQuestionResponse{
+			Id:          question.ID.Hex(),
 			TopicId:     question.TopicID,
 			Type:        question.Type,
 			Name:        question.Name,
@@ -135,6 +145,10 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 			Description: question.Description,
 			Image:       question.Image,
 			Constrains:  question.Constraints,
+			InputInfo:   question.InputInfo,
+			OutputInfo:  question.OutputInfo,
+			CreatedAt:   question.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:   question.UpdatedAt.Format(time.RFC3339),
 		})
 	}
 
@@ -145,7 +159,6 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 	}, nil
 }
 
-// UpdateQuestion updates an existing question
 func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.UpdateQuestionRequest) (*pb.Void, error) {
 	update := bson.M{
 		"$set": bson.M{
@@ -156,6 +169,8 @@ func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.Upda
 			"description": req.Description,
 			"image":       req.Image,
 			"constrains":  req.Constrains,
+			"input_info":  req.InputInfo,
+			"output_info": req.OutputInfo,
 			"updated_at":  time.Now(),
 		},
 	}
