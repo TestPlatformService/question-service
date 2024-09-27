@@ -109,3 +109,23 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 		Offset: req.Offset,
 	}, nil
 }
+
+func (T *topicRepo) GetTopicIdByName(req *pb.TopicNameReq) (*pb.TopicIdResp, error) {
+	query := `
+				SELECT 
+					id
+				FROM 
+					subject_topics
+				WHERE 
+					name = $1 AND deleted_at IS NULL`
+	row := T.DB.QueryRow(query, req.Name)
+	var id string
+	err := row.Scan(&id)
+	if err != nil {
+		T.Logger.Error(err.Error())
+		return nil, err
+	}
+	return &pb.TopicIdResp{
+		Id: id,
+	}, nil
+}

@@ -26,6 +26,7 @@ type ITopicStorage interface {
 	UpdateTopic(req *pb2.UpdateTopicReq) (*pb2.UpdateTopicResp, error)
 	DeleteTopic(req *pb2.DeleteTopicReq) (*pb2.DeleteTopicResp, error)
 	GetAllTopics(req *pb2.GetAllTopicsReq) (*pb2.GetAllTopicsResp, error)
+	GetTopicIdByName(req *pb2.TopicNameReq) (*pb2.TopicIdResp, error)
 }
 
 type IQuestionStorage interface {

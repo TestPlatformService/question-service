@@ -56,3 +56,12 @@ func (T *TopicService) GetAllTopics(ctx context.Context, req *pb.GetAllTopicsReq
 	}
 	return resp, nil
 }
+
+func (T *TopicService) GetTopicIdByName(ctx context.Context, req *pb.TopicNameReq) (*pb.TopicIdResp, error) {
+	resp, err := T.storage.Topic().GetTopicIdByName(req)
+	if err != nil {
+		T.logger.Error(fmt.Sprintf("GetTopicIdByName request error: %v", err))
+		return nil, err
+	}
+	return resp, nil
+}
