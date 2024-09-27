@@ -12,6 +12,9 @@ import (
 
 type Istorage interface {
 	Question() repo.IQuestionStorage
+	Output() repo.IOutputStorage
+	Input() repo.IInputStorage
+	TestCase() repo.ITestCaseStorage
 	Subject() repo.ISubjectStorage
 	Topic() repo.ITopicStorage
 }

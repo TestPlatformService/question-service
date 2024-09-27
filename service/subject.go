@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"database/sql"
 	"log/slog"
 	pb "question/genproto/subject"
 	"question/storage"
@@ -14,7 +13,7 @@ type SubjectService struct {
 	Logger  *slog.Logger
 }
 
-func NewSubjectService(db *sql.DB, Logger *slog.Logger, istorage storage.Istorage) *SubjectService {
+func NewSubjectService(Logger *slog.Logger, istorage storage.Istorage) *SubjectService {
 	return &SubjectService{
 		Subject: istorage,
 		Logger:  Logger,
