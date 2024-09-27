@@ -38,5 +38,5 @@ func main(){
 
 	topicService := service.NewTopicService(storage, logger)
 	subjectService := service.NewSubjectService(logger, storage)
-	
+	caseService := service.NewCaseService()
 }
