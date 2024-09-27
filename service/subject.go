@@ -10,14 +10,14 @@ import (
 
 type SubjectService struct {
 	pb.UnimplementedSubjectServiceServer
-	Subject storage.IStorage
-	Logger *slog.Logger
+	Subject storage.Istorage
+	Logger  *slog.Logger
 }
 
-func NewSubjectService(db *sql.DB, Logger *slog.Logger, istorage storage.IStorage) *SubjectService {
+func NewSubjectService(db *sql.DB, Logger *slog.Logger, istorage storage.Istorage) *SubjectService {
 	return &SubjectService{
 		Subject: istorage,
-		Logger: Logger,
+		Logger:  Logger,
 	}
 }
 
