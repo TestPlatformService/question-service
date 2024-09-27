@@ -30,6 +30,7 @@ type QuestionServiceClient interface {
 	DeleteQuestion(ctx context.Context, in *DeleteQuestionRequest, opts ...grpc.CallOption) (*Void, error)
 	UploadImageQuestion(ctx context.Context, in *UploadImageQuestionRequest, opts ...grpc.CallOption) (*Void, error)
 	DeleteImageQuestion(ctx context.Context, in *DeleteImageQuestionRequest, opts ...grpc.CallOption) (*Void, error)
+	IsQuestionExist(ctx context.Context, in *QuestionId, opts ...grpc.CallOption) (*Void, error)
 	// output
 	CreateQuestionOutput(ctx context.Context, in *CreateQuestionOutputRequest, opts ...grpc.CallOption) (*QuestionOutputId, error)
 	GetQuestionOutput(ctx context.Context, in *QuestionOutputId, opts ...grpc.CallOption) (*GetQuestionOutputResponse, error)
@@ -115,6 +116,15 @@ func (c *questionServiceClient) UploadImageQuestion(ctx context.Context, in *Upl
 func (c *questionServiceClient) DeleteImageQuestion(ctx context.Context, in *DeleteImageQuestionRequest, opts ...grpc.CallOption) (*Void, error) {
 	out := new(Void)
 	err := c.cc.Invoke(ctx, "/question.QuestionService/DeleteImageQuestion", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *questionServiceClient) IsQuestionExist(ctx context.Context, in *QuestionId, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/question.QuestionService/IsQuestionExist", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -268,6 +278,7 @@ type QuestionServiceServer interface {
 	DeleteQuestion(context.Context, *DeleteQuestionRequest) (*Void, error)
 	UploadImageQuestion(context.Context, *UploadImageQuestionRequest) (*Void, error)
 	DeleteImageQuestion(context.Context, *DeleteImageQuestionRequest) (*Void, error)
+	IsQuestionExist(context.Context, *QuestionId) (*Void, error)
 	// output
 	CreateQuestionOutput(context.Context, *CreateQuestionOutputRequest) (*QuestionOutputId, error)
 	GetQuestionOutput(context.Context, *QuestionOutputId) (*GetQuestionOutputResponse, error)
@@ -313,6 +324,9 @@ func (UnimplementedQuestionServiceServer) UploadImageQuestion(context.Context, *
 }
 func (UnimplementedQuestionServiceServer) DeleteImageQuestion(context.Context, *DeleteImageQuestionRequest) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteImageQuestion not implemented")
+}
+func (UnimplementedQuestionServiceServer) IsQuestionExist(context.Context, *QuestionId) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsQuestionExist not implemented")
 }
 func (UnimplementedQuestionServiceServer) CreateQuestionOutput(context.Context, *CreateQuestionOutputRequest) (*QuestionOutputId, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestionOutput not implemented")
@@ -494,6 +508,24 @@ func _QuestionService_DeleteImageQuestion_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QuestionServiceServer).DeleteImageQuestion(ctx, req.(*DeleteImageQuestionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QuestionService_IsQuestionExist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuestionId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuestionServiceServer).IsQuestionExist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.QuestionService/IsQuestionExist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuestionServiceServer).IsQuestionExist(ctx, req.(*QuestionId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -802,6 +834,10 @@ var QuestionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteImageQuestion",
 			Handler:    _QuestionService_DeleteImageQuestion_Handler,
+		},
+		{
+			MethodName: "IsQuestionExist",
+			Handler:    _QuestionService_IsQuestionExist_Handler,
 		},
 		{
 			MethodName: "CreateQuestionOutput",

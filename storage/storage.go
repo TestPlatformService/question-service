@@ -39,3 +39,11 @@ func (pro *StoragePro) Subject() repo.ISubjectStorage {
 func (pro *StoragePro) Topic() repo.ITopicStorage {
 	return postgres.NewTopicRepo(pro.PDB, logs.NewLogger())
 }
+
+func (pro *StoragePro) Input() repo.IInputStorage {
+	return mongosh.NewInputRepository(pro.Mdb)
+}
+
+func (pro *StoragePro) Output() repo.IOutputStorage {
+	return mongosh.NewOutputRepository(pro.Mdb)
+}

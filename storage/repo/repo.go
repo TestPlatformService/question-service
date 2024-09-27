@@ -38,3 +38,19 @@ type IQuestionStorage interface {
 	DeleteImageQuestion(context.Context, *pb3.DeleteImageQuestionRequest) (*pb3.Void, error)
 	IsQuestionExist(context.Context, *pb3.QuestionId) (*pb3.Void, error)
 }
+
+type IInputStorage interface {
+	CreateQuestionInput(context.Context, *pb3.CreateQuestionInputRequest) (*pb3.QuestionInputId, error)
+	GetQuestionInput(context.Context, *pb3.QuestionInputId) (*pb3.GetQuestionInputResponse, error)
+	GetAllQuestionInputsByQuestionId(context.Context, *pb3.GetAllQuestionInputsByQuestionIdRequest) (*pb3.GetAllQuestionInputsByQuestionIdResponse, error)
+	UpdateQuestionInput(context.Context, *pb3.UpdateQuestionInputRequest) (*pb3.Void, error)
+	DeleteQuestionInput(context.Context, *pb3.DeleteQuestionInputRequest) (*pb3.Void, error)
+}
+
+type IOutputStorage interface {
+	CreateQuestionOutput(context.Context, *pb3.CreateQuestionOutputRequest) (*pb3.QuestionOutputId, error)
+	GetQuestionOutput(context.Context, *pb3.QuestionOutputId) (*pb3.GetQuestionOutputResponse, error)
+	GetAllQuestionOutputsByQuestionId(context.Context, *pb3.GetAllQuestionOutputsByQuestionIdRequest) (*pb3.GetAllQuestionOutputsByQuestionIdResponse, error)
+	UpdateQuestionOutput(context.Context, *pb3.UpdateQuestionOutputRequest) (*pb3.Void, error)
+	DeleteQuestionOutput(context.Context, *pb3.DeleteQuestionOutputRequest) (*pb3.Void, error)
+}
