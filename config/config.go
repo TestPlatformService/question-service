@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	USER_SERVICE string
+	QUESTION_SERVICE string
 	DB_HOST      string
 	DB_PORT      string
 	DB_USER      string
@@ -26,7 +26,7 @@ func LoadConfig() Config {
 
 	config := Config{}
 
-	config.USER_SERVICE = cast.ToString(coalesce("USER_SERVICE", ":50053"))
+	config.QUESTION_SERVICE = cast.ToString(coalesce("QUESTION_SERVICE", ":50053"))
 	config.DB_HOST = cast.ToString(coalesce("DB_HOST", "localhost"))
 	config.DB_PORT = cast.ToString(coalesce("DB_PORT", "5432"))
 	config.DB_USER = cast.ToString(coalesce("DB_USER", "postgres"))
