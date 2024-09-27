@@ -47,3 +47,7 @@ func (pro *StoragePro) Input() repo.IInputStorage {
 func (pro *StoragePro) Output() repo.IOutputStorage {
 	return mongosh.NewOutputRepository(pro.Mdb)
 }
+
+func (pro *StoragePro) TestCase() repo.ITestCaseStorage {
+	return mongosh.NewTestCaseRepository(pro.Mdb)
+}

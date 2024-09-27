@@ -25,6 +25,7 @@ type NotificationsClient interface {
 	CreateNotification(ctx context.Context, in *CreateNotificationsReq, opts ...grpc.CallOption) (*CreateNotificationsRes, error)
 	GetAllNotifications(ctx context.Context, in *GetNotificationsReq, opts ...grpc.CallOption) (*GetNotificationsResponse, error)
 	GetAndMarkNotificationAsRead(ctx context.Context, in *GetAndMarkNotificationAsReadReq, opts ...grpc.CallOption) (*GetAndMarkNotificationAsReadRes, error)
+	MarkNotificationAsRead(ctx context.Context, in *MarkNotificationAsReadReq, opts ...grpc.CallOption) (*Void, error)
 }
 
 type notificationsClient struct {
@@ -62,6 +63,15 @@ func (c *notificationsClient) GetAndMarkNotificationAsRead(ctx context.Context, 
 	return out, nil
 }
 
+func (c *notificationsClient) MarkNotificationAsRead(ctx context.Context, in *MarkNotificationAsReadReq, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/notification.Notifications/MarkNotificationAsRead", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NotificationsServer is the server API for Notifications service.
 // All implementations must embed UnimplementedNotificationsServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type NotificationsServer interface {
 	CreateNotification(context.Context, *CreateNotificationsReq) (*CreateNotificationsRes, error)
 	GetAllNotifications(context.Context, *GetNotificationsReq) (*GetNotificationsResponse, error)
 	GetAndMarkNotificationAsRead(context.Context, *GetAndMarkNotificationAsReadReq) (*GetAndMarkNotificationAsReadRes, error)
+	MarkNotificationAsRead(context.Context, *MarkNotificationAsReadReq) (*Void, error)
 	mustEmbedUnimplementedNotificationsServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedNotificationsServer) GetAllNotifications(context.Context, *Ge
 }
 func (UnimplementedNotificationsServer) GetAndMarkNotificationAsRead(context.Context, *GetAndMarkNotificationAsReadReq) (*GetAndMarkNotificationAsReadRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAndMarkNotificationAsRead not implemented")
+}
+func (UnimplementedNotificationsServer) MarkNotificationAsRead(context.Context, *MarkNotificationAsReadReq) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MarkNotificationAsRead not implemented")
 }
 func (UnimplementedNotificationsServer) mustEmbedUnimplementedNotificationsServer() {}
 
@@ -152,6 +166,24 @@ func _Notifications_GetAndMarkNotificationAsRead_Handler(srv interface{}, ctx co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Notifications_MarkNotificationAsRead_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarkNotificationAsReadReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationsServer).MarkNotificationAsRead(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/notification.Notifications/MarkNotificationAsRead",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationsServer).MarkNotificationAsRead(ctx, req.(*MarkNotificationAsReadReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Notifications_ServiceDesc is the grpc.ServiceDesc for Notifications service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var Notifications_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAndMarkNotificationAsRead",
 			Handler:    _Notifications_GetAndMarkNotificationAsRead_Handler,
+		},
+		{
+			MethodName: "MarkNotificationAsRead",
+			Handler:    _Notifications_MarkNotificationAsRead_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

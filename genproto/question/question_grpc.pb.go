@@ -31,24 +31,6 @@ type QuestionServiceClient interface {
 	UploadImageQuestion(ctx context.Context, in *UploadImageQuestionRequest, opts ...grpc.CallOption) (*Void, error)
 	DeleteImageQuestion(ctx context.Context, in *DeleteImageQuestionRequest, opts ...grpc.CallOption) (*Void, error)
 	IsQuestionExist(ctx context.Context, in *QuestionId, opts ...grpc.CallOption) (*Void, error)
-	// output
-	CreateQuestionOutput(ctx context.Context, in *CreateQuestionOutputRequest, opts ...grpc.CallOption) (*QuestionOutputId, error)
-	GetQuestionOutput(ctx context.Context, in *QuestionOutputId, opts ...grpc.CallOption) (*GetQuestionOutputResponse, error)
-	GetAllQuestionOutputsByQuestionId(ctx context.Context, in *GetAllQuestionOutputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionOutputsByQuestionIdResponse, error)
-	UpdateQuestionOutput(ctx context.Context, in *UpdateQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error)
-	DeleteQuestionOutput(ctx context.Context, in *DeleteQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error)
-	// input
-	CreateQuestionInput(ctx context.Context, in *CreateQuestionInputRequest, opts ...grpc.CallOption) (*QuestionInputId, error)
-	GetQuestionInput(ctx context.Context, in *QuestionInputId, opts ...grpc.CallOption) (*GetQuestionInputResponse, error)
-	GetAllQuestionInputsByQuestionId(ctx context.Context, in *GetAllQuestionInputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionInputsByQuestionIdResponse, error)
-	UpdateQuestionInput(ctx context.Context, in *UpdateQuestionInputRequest, opts ...grpc.CallOption) (*Void, error)
-	DeleteQuestionInput(ctx context.Context, in *DeleteQuestionInputRequest, opts ...grpc.CallOption) (*Void, error)
-	// test_case
-	CreateTestCase(ctx context.Context, in *CreateTestCaseRequest, opts ...grpc.CallOption) (*TestCaseId, error)
-	GetTestCase(ctx context.Context, in *TestCaseId, opts ...grpc.CallOption) (*GetTestCaseResponse, error)
-	GetAllTestCasesByQuestionId(ctx context.Context, in *GetAllTestCasesByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllTestCasesByQuestionIdResponse, error)
-	UpdateTestCase(ctx context.Context, in *UpdateTestCaseRequest, opts ...grpc.CallOption) (*Void, error)
-	DeleteTestCase(ctx context.Context, in *DeleteTestCaseRequest, opts ...grpc.CallOption) (*Void, error)
 }
 
 type questionServiceClient struct {
@@ -131,141 +113,6 @@ func (c *questionServiceClient) IsQuestionExist(ctx context.Context, in *Questio
 	return out, nil
 }
 
-func (c *questionServiceClient) CreateQuestionOutput(ctx context.Context, in *CreateQuestionOutputRequest, opts ...grpc.CallOption) (*QuestionOutputId, error) {
-	out := new(QuestionOutputId)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/CreateQuestionOutput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) GetQuestionOutput(ctx context.Context, in *QuestionOutputId, opts ...grpc.CallOption) (*GetQuestionOutputResponse, error) {
-	out := new(GetQuestionOutputResponse)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/GetQuestionOutput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) GetAllQuestionOutputsByQuestionId(ctx context.Context, in *GetAllQuestionOutputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionOutputsByQuestionIdResponse, error) {
-	out := new(GetAllQuestionOutputsByQuestionIdResponse)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/GetAllQuestionOutputsByQuestionId", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) UpdateQuestionOutput(ctx context.Context, in *UpdateQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error) {
-	out := new(Void)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/UpdateQuestionOutput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) DeleteQuestionOutput(ctx context.Context, in *DeleteQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error) {
-	out := new(Void)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/DeleteQuestionOutput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) CreateQuestionInput(ctx context.Context, in *CreateQuestionInputRequest, opts ...grpc.CallOption) (*QuestionInputId, error) {
-	out := new(QuestionInputId)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/CreateQuestionInput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) GetQuestionInput(ctx context.Context, in *QuestionInputId, opts ...grpc.CallOption) (*GetQuestionInputResponse, error) {
-	out := new(GetQuestionInputResponse)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/GetQuestionInput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) GetAllQuestionInputsByQuestionId(ctx context.Context, in *GetAllQuestionInputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionInputsByQuestionIdResponse, error) {
-	out := new(GetAllQuestionInputsByQuestionIdResponse)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/GetAllQuestionInputsByQuestionId", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) UpdateQuestionInput(ctx context.Context, in *UpdateQuestionInputRequest, opts ...grpc.CallOption) (*Void, error) {
-	out := new(Void)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/UpdateQuestionInput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) DeleteQuestionInput(ctx context.Context, in *DeleteQuestionInputRequest, opts ...grpc.CallOption) (*Void, error) {
-	out := new(Void)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/DeleteQuestionInput", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) CreateTestCase(ctx context.Context, in *CreateTestCaseRequest, opts ...grpc.CallOption) (*TestCaseId, error) {
-	out := new(TestCaseId)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/CreateTestCase", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) GetTestCase(ctx context.Context, in *TestCaseId, opts ...grpc.CallOption) (*GetTestCaseResponse, error) {
-	out := new(GetTestCaseResponse)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/GetTestCase", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) GetAllTestCasesByQuestionId(ctx context.Context, in *GetAllTestCasesByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllTestCasesByQuestionIdResponse, error) {
-	out := new(GetAllTestCasesByQuestionIdResponse)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/GetAllTestCasesByQuestionId", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) UpdateTestCase(ctx context.Context, in *UpdateTestCaseRequest, opts ...grpc.CallOption) (*Void, error) {
-	out := new(Void)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/UpdateTestCase", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) DeleteTestCase(ctx context.Context, in *DeleteTestCaseRequest, opts ...grpc.CallOption) (*Void, error) {
-	out := new(Void)
-	err := c.cc.Invoke(ctx, "/question.QuestionService/DeleteTestCase", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // QuestionServiceServer is the server API for QuestionService service.
 // All implementations must embed UnimplementedQuestionServiceServer
 // for forward compatibility
@@ -279,24 +126,6 @@ type QuestionServiceServer interface {
 	UploadImageQuestion(context.Context, *UploadImageQuestionRequest) (*Void, error)
 	DeleteImageQuestion(context.Context, *DeleteImageQuestionRequest) (*Void, error)
 	IsQuestionExist(context.Context, *QuestionId) (*Void, error)
-	// output
-	CreateQuestionOutput(context.Context, *CreateQuestionOutputRequest) (*QuestionOutputId, error)
-	GetQuestionOutput(context.Context, *QuestionOutputId) (*GetQuestionOutputResponse, error)
-	GetAllQuestionOutputsByQuestionId(context.Context, *GetAllQuestionOutputsByQuestionIdRequest) (*GetAllQuestionOutputsByQuestionIdResponse, error)
-	UpdateQuestionOutput(context.Context, *UpdateQuestionOutputRequest) (*Void, error)
-	DeleteQuestionOutput(context.Context, *DeleteQuestionOutputRequest) (*Void, error)
-	// input
-	CreateQuestionInput(context.Context, *CreateQuestionInputRequest) (*QuestionInputId, error)
-	GetQuestionInput(context.Context, *QuestionInputId) (*GetQuestionInputResponse, error)
-	GetAllQuestionInputsByQuestionId(context.Context, *GetAllQuestionInputsByQuestionIdRequest) (*GetAllQuestionInputsByQuestionIdResponse, error)
-	UpdateQuestionInput(context.Context, *UpdateQuestionInputRequest) (*Void, error)
-	DeleteQuestionInput(context.Context, *DeleteQuestionInputRequest) (*Void, error)
-	// test_case
-	CreateTestCase(context.Context, *CreateTestCaseRequest) (*TestCaseId, error)
-	GetTestCase(context.Context, *TestCaseId) (*GetTestCaseResponse, error)
-	GetAllTestCasesByQuestionId(context.Context, *GetAllTestCasesByQuestionIdRequest) (*GetAllTestCasesByQuestionIdResponse, error)
-	UpdateTestCase(context.Context, *UpdateTestCaseRequest) (*Void, error)
-	DeleteTestCase(context.Context, *DeleteTestCaseRequest) (*Void, error)
 	mustEmbedUnimplementedQuestionServiceServer()
 }
 
@@ -327,51 +156,6 @@ func (UnimplementedQuestionServiceServer) DeleteImageQuestion(context.Context, *
 }
 func (UnimplementedQuestionServiceServer) IsQuestionExist(context.Context, *QuestionId) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsQuestionExist not implemented")
-}
-func (UnimplementedQuestionServiceServer) CreateQuestionOutput(context.Context, *CreateQuestionOutputRequest) (*QuestionOutputId, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestionOutput not implemented")
-}
-func (UnimplementedQuestionServiceServer) GetQuestionOutput(context.Context, *QuestionOutputId) (*GetQuestionOutputResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetQuestionOutput not implemented")
-}
-func (UnimplementedQuestionServiceServer) GetAllQuestionOutputsByQuestionId(context.Context, *GetAllQuestionOutputsByQuestionIdRequest) (*GetAllQuestionOutputsByQuestionIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllQuestionOutputsByQuestionId not implemented")
-}
-func (UnimplementedQuestionServiceServer) UpdateQuestionOutput(context.Context, *UpdateQuestionOutputRequest) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuestionOutput not implemented")
-}
-func (UnimplementedQuestionServiceServer) DeleteQuestionOutput(context.Context, *DeleteQuestionOutputRequest) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestionOutput not implemented")
-}
-func (UnimplementedQuestionServiceServer) CreateQuestionInput(context.Context, *CreateQuestionInputRequest) (*QuestionInputId, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestionInput not implemented")
-}
-func (UnimplementedQuestionServiceServer) GetQuestionInput(context.Context, *QuestionInputId) (*GetQuestionInputResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetQuestionInput not implemented")
-}
-func (UnimplementedQuestionServiceServer) GetAllQuestionInputsByQuestionId(context.Context, *GetAllQuestionInputsByQuestionIdRequest) (*GetAllQuestionInputsByQuestionIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllQuestionInputsByQuestionId not implemented")
-}
-func (UnimplementedQuestionServiceServer) UpdateQuestionInput(context.Context, *UpdateQuestionInputRequest) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuestionInput not implemented")
-}
-func (UnimplementedQuestionServiceServer) DeleteQuestionInput(context.Context, *DeleteQuestionInputRequest) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestionInput not implemented")
-}
-func (UnimplementedQuestionServiceServer) CreateTestCase(context.Context, *CreateTestCaseRequest) (*TestCaseId, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateTestCase not implemented")
-}
-func (UnimplementedQuestionServiceServer) GetTestCase(context.Context, *TestCaseId) (*GetTestCaseResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTestCase not implemented")
-}
-func (UnimplementedQuestionServiceServer) GetAllTestCasesByQuestionId(context.Context, *GetAllTestCasesByQuestionIdRequest) (*GetAllTestCasesByQuestionIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllTestCasesByQuestionId not implemented")
-}
-func (UnimplementedQuestionServiceServer) UpdateTestCase(context.Context, *UpdateTestCaseRequest) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTestCase not implemented")
-}
-func (UnimplementedQuestionServiceServer) DeleteTestCase(context.Context, *DeleteTestCaseRequest) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteTestCase not implemented")
 }
 func (UnimplementedQuestionServiceServer) mustEmbedUnimplementedQuestionServiceServer() {}
 
@@ -530,276 +314,6 @@ func _QuestionService_IsQuestionExist_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _QuestionService_CreateQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateQuestionOutputRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).CreateQuestionOutput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/CreateQuestionOutput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).CreateQuestionOutput(ctx, req.(*CreateQuestionOutputRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_GetQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuestionOutputId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).GetQuestionOutput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/GetQuestionOutput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).GetQuestionOutput(ctx, req.(*QuestionOutputId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_GetAllQuestionOutputsByQuestionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAllQuestionOutputsByQuestionIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).GetAllQuestionOutputsByQuestionId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/GetAllQuestionOutputsByQuestionId",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).GetAllQuestionOutputsByQuestionId(ctx, req.(*GetAllQuestionOutputsByQuestionIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_UpdateQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateQuestionOutputRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).UpdateQuestionOutput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/UpdateQuestionOutput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).UpdateQuestionOutput(ctx, req.(*UpdateQuestionOutputRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_DeleteQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteQuestionOutputRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).DeleteQuestionOutput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/DeleteQuestionOutput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).DeleteQuestionOutput(ctx, req.(*DeleteQuestionOutputRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_CreateQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateQuestionInputRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).CreateQuestionInput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/CreateQuestionInput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).CreateQuestionInput(ctx, req.(*CreateQuestionInputRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_GetQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuestionInputId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).GetQuestionInput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/GetQuestionInput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).GetQuestionInput(ctx, req.(*QuestionInputId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_GetAllQuestionInputsByQuestionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAllQuestionInputsByQuestionIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).GetAllQuestionInputsByQuestionId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/GetAllQuestionInputsByQuestionId",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).GetAllQuestionInputsByQuestionId(ctx, req.(*GetAllQuestionInputsByQuestionIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_UpdateQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateQuestionInputRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).UpdateQuestionInput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/UpdateQuestionInput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).UpdateQuestionInput(ctx, req.(*UpdateQuestionInputRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_DeleteQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteQuestionInputRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).DeleteQuestionInput(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/DeleteQuestionInput",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).DeleteQuestionInput(ctx, req.(*DeleteQuestionInputRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_CreateTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateTestCaseRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).CreateTestCase(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/CreateTestCase",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).CreateTestCase(ctx, req.(*CreateTestCaseRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_GetTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TestCaseId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).GetTestCase(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/GetTestCase",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).GetTestCase(ctx, req.(*TestCaseId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_GetAllTestCasesByQuestionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAllTestCasesByQuestionIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).GetAllTestCasesByQuestionId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/GetAllTestCasesByQuestionId",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).GetAllTestCasesByQuestionId(ctx, req.(*GetAllTestCasesByQuestionIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_UpdateTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTestCaseRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).UpdateTestCase(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/UpdateTestCase",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).UpdateTestCase(ctx, req.(*UpdateTestCaseRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_DeleteTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteTestCaseRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).DeleteTestCase(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/question.QuestionService/DeleteTestCase",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).DeleteTestCase(ctx, req.(*DeleteTestCaseRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // QuestionService_ServiceDesc is the grpc.ServiceDesc for QuestionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -839,65 +353,695 @@ var QuestionService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "IsQuestionExist",
 			Handler:    _QuestionService_IsQuestionExist_Handler,
 		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "question.proto",
+}
+
+// OutputServiceClient is the client API for OutputService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type OutputServiceClient interface {
+	CreateQuestionOutput(ctx context.Context, in *CreateQuestionOutputRequest, opts ...grpc.CallOption) (*QuestionOutputId, error)
+	GetQuestionOutput(ctx context.Context, in *QuestionOutputId, opts ...grpc.CallOption) (*GetQuestionOutputResponse, error)
+	GetAllQuestionOutputsByQuestionId(ctx context.Context, in *GetAllQuestionOutputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionOutputsByQuestionIdResponse, error)
+	UpdateQuestionOutput(ctx context.Context, in *UpdateQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error)
+	DeleteQuestionOutput(ctx context.Context, in *DeleteQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error)
+}
+
+type outputServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewOutputServiceClient(cc grpc.ClientConnInterface) OutputServiceClient {
+	return &outputServiceClient{cc}
+}
+
+func (c *outputServiceClient) CreateQuestionOutput(ctx context.Context, in *CreateQuestionOutputRequest, opts ...grpc.CallOption) (*QuestionOutputId, error) {
+	out := new(QuestionOutputId)
+	err := c.cc.Invoke(ctx, "/question.OutputService/CreateQuestionOutput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *outputServiceClient) GetQuestionOutput(ctx context.Context, in *QuestionOutputId, opts ...grpc.CallOption) (*GetQuestionOutputResponse, error) {
+	out := new(GetQuestionOutputResponse)
+	err := c.cc.Invoke(ctx, "/question.OutputService/GetQuestionOutput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *outputServiceClient) GetAllQuestionOutputsByQuestionId(ctx context.Context, in *GetAllQuestionOutputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionOutputsByQuestionIdResponse, error) {
+	out := new(GetAllQuestionOutputsByQuestionIdResponse)
+	err := c.cc.Invoke(ctx, "/question.OutputService/GetAllQuestionOutputsByQuestionId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *outputServiceClient) UpdateQuestionOutput(ctx context.Context, in *UpdateQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/question.OutputService/UpdateQuestionOutput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *outputServiceClient) DeleteQuestionOutput(ctx context.Context, in *DeleteQuestionOutputRequest, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/question.OutputService/DeleteQuestionOutput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// OutputServiceServer is the server API for OutputService service.
+// All implementations must embed UnimplementedOutputServiceServer
+// for forward compatibility
+type OutputServiceServer interface {
+	CreateQuestionOutput(context.Context, *CreateQuestionOutputRequest) (*QuestionOutputId, error)
+	GetQuestionOutput(context.Context, *QuestionOutputId) (*GetQuestionOutputResponse, error)
+	GetAllQuestionOutputsByQuestionId(context.Context, *GetAllQuestionOutputsByQuestionIdRequest) (*GetAllQuestionOutputsByQuestionIdResponse, error)
+	UpdateQuestionOutput(context.Context, *UpdateQuestionOutputRequest) (*Void, error)
+	DeleteQuestionOutput(context.Context, *DeleteQuestionOutputRequest) (*Void, error)
+	mustEmbedUnimplementedOutputServiceServer()
+}
+
+// UnimplementedOutputServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedOutputServiceServer struct {
+}
+
+func (UnimplementedOutputServiceServer) CreateQuestionOutput(context.Context, *CreateQuestionOutputRequest) (*QuestionOutputId, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestionOutput not implemented")
+}
+func (UnimplementedOutputServiceServer) GetQuestionOutput(context.Context, *QuestionOutputId) (*GetQuestionOutputResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQuestionOutput not implemented")
+}
+func (UnimplementedOutputServiceServer) GetAllQuestionOutputsByQuestionId(context.Context, *GetAllQuestionOutputsByQuestionIdRequest) (*GetAllQuestionOutputsByQuestionIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllQuestionOutputsByQuestionId not implemented")
+}
+func (UnimplementedOutputServiceServer) UpdateQuestionOutput(context.Context, *UpdateQuestionOutputRequest) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuestionOutput not implemented")
+}
+func (UnimplementedOutputServiceServer) DeleteQuestionOutput(context.Context, *DeleteQuestionOutputRequest) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestionOutput not implemented")
+}
+func (UnimplementedOutputServiceServer) mustEmbedUnimplementedOutputServiceServer() {}
+
+// UnsafeOutputServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to OutputServiceServer will
+// result in compilation errors.
+type UnsafeOutputServiceServer interface {
+	mustEmbedUnimplementedOutputServiceServer()
+}
+
+func RegisterOutputServiceServer(s grpc.ServiceRegistrar, srv OutputServiceServer) {
+	s.RegisterService(&OutputService_ServiceDesc, srv)
+}
+
+func _OutputService_CreateQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateQuestionOutputRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutputServiceServer).CreateQuestionOutput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.OutputService/CreateQuestionOutput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutputServiceServer).CreateQuestionOutput(ctx, req.(*CreateQuestionOutputRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OutputService_GetQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuestionOutputId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutputServiceServer).GetQuestionOutput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.OutputService/GetQuestionOutput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutputServiceServer).GetQuestionOutput(ctx, req.(*QuestionOutputId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OutputService_GetAllQuestionOutputsByQuestionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllQuestionOutputsByQuestionIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutputServiceServer).GetAllQuestionOutputsByQuestionId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.OutputService/GetAllQuestionOutputsByQuestionId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutputServiceServer).GetAllQuestionOutputsByQuestionId(ctx, req.(*GetAllQuestionOutputsByQuestionIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OutputService_UpdateQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateQuestionOutputRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutputServiceServer).UpdateQuestionOutput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.OutputService/UpdateQuestionOutput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutputServiceServer).UpdateQuestionOutput(ctx, req.(*UpdateQuestionOutputRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OutputService_DeleteQuestionOutput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteQuestionOutputRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutputServiceServer).DeleteQuestionOutput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.OutputService/DeleteQuestionOutput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutputServiceServer).DeleteQuestionOutput(ctx, req.(*DeleteQuestionOutputRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// OutputService_ServiceDesc is the grpc.ServiceDesc for OutputService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var OutputService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "question.OutputService",
+	HandlerType: (*OutputServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateQuestionOutput",
-			Handler:    _QuestionService_CreateQuestionOutput_Handler,
+			Handler:    _OutputService_CreateQuestionOutput_Handler,
 		},
 		{
 			MethodName: "GetQuestionOutput",
-			Handler:    _QuestionService_GetQuestionOutput_Handler,
+			Handler:    _OutputService_GetQuestionOutput_Handler,
 		},
 		{
 			MethodName: "GetAllQuestionOutputsByQuestionId",
-			Handler:    _QuestionService_GetAllQuestionOutputsByQuestionId_Handler,
+			Handler:    _OutputService_GetAllQuestionOutputsByQuestionId_Handler,
 		},
 		{
 			MethodName: "UpdateQuestionOutput",
-			Handler:    _QuestionService_UpdateQuestionOutput_Handler,
+			Handler:    _OutputService_UpdateQuestionOutput_Handler,
 		},
 		{
 			MethodName: "DeleteQuestionOutput",
-			Handler:    _QuestionService_DeleteQuestionOutput_Handler,
+			Handler:    _OutputService_DeleteQuestionOutput_Handler,
 		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "question.proto",
+}
+
+// InputServiceClient is the client API for InputService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type InputServiceClient interface {
+	CreateQuestionInput(ctx context.Context, in *CreateQuestionInputRequest, opts ...grpc.CallOption) (*QuestionInputId, error)
+	GetQuestionInput(ctx context.Context, in *QuestionInputId, opts ...grpc.CallOption) (*GetQuestionInputResponse, error)
+	GetAllQuestionInputsByQuestionId(ctx context.Context, in *GetAllQuestionInputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionInputsByQuestionIdResponse, error)
+	UpdateQuestionInput(ctx context.Context, in *UpdateQuestionInputRequest, opts ...grpc.CallOption) (*Void, error)
+	DeleteQuestionInput(ctx context.Context, in *DeleteQuestionInputRequest, opts ...grpc.CallOption) (*Void, error)
+}
+
+type inputServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewInputServiceClient(cc grpc.ClientConnInterface) InputServiceClient {
+	return &inputServiceClient{cc}
+}
+
+func (c *inputServiceClient) CreateQuestionInput(ctx context.Context, in *CreateQuestionInputRequest, opts ...grpc.CallOption) (*QuestionInputId, error) {
+	out := new(QuestionInputId)
+	err := c.cc.Invoke(ctx, "/question.InputService/CreateQuestionInput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *inputServiceClient) GetQuestionInput(ctx context.Context, in *QuestionInputId, opts ...grpc.CallOption) (*GetQuestionInputResponse, error) {
+	out := new(GetQuestionInputResponse)
+	err := c.cc.Invoke(ctx, "/question.InputService/GetQuestionInput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *inputServiceClient) GetAllQuestionInputsByQuestionId(ctx context.Context, in *GetAllQuestionInputsByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllQuestionInputsByQuestionIdResponse, error) {
+	out := new(GetAllQuestionInputsByQuestionIdResponse)
+	err := c.cc.Invoke(ctx, "/question.InputService/GetAllQuestionInputsByQuestionId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *inputServiceClient) UpdateQuestionInput(ctx context.Context, in *UpdateQuestionInputRequest, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/question.InputService/UpdateQuestionInput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *inputServiceClient) DeleteQuestionInput(ctx context.Context, in *DeleteQuestionInputRequest, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/question.InputService/DeleteQuestionInput", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// InputServiceServer is the server API for InputService service.
+// All implementations must embed UnimplementedInputServiceServer
+// for forward compatibility
+type InputServiceServer interface {
+	CreateQuestionInput(context.Context, *CreateQuestionInputRequest) (*QuestionInputId, error)
+	GetQuestionInput(context.Context, *QuestionInputId) (*GetQuestionInputResponse, error)
+	GetAllQuestionInputsByQuestionId(context.Context, *GetAllQuestionInputsByQuestionIdRequest) (*GetAllQuestionInputsByQuestionIdResponse, error)
+	UpdateQuestionInput(context.Context, *UpdateQuestionInputRequest) (*Void, error)
+	DeleteQuestionInput(context.Context, *DeleteQuestionInputRequest) (*Void, error)
+	mustEmbedUnimplementedInputServiceServer()
+}
+
+// UnimplementedInputServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedInputServiceServer struct {
+}
+
+func (UnimplementedInputServiceServer) CreateQuestionInput(context.Context, *CreateQuestionInputRequest) (*QuestionInputId, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestionInput not implemented")
+}
+func (UnimplementedInputServiceServer) GetQuestionInput(context.Context, *QuestionInputId) (*GetQuestionInputResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQuestionInput not implemented")
+}
+func (UnimplementedInputServiceServer) GetAllQuestionInputsByQuestionId(context.Context, *GetAllQuestionInputsByQuestionIdRequest) (*GetAllQuestionInputsByQuestionIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllQuestionInputsByQuestionId not implemented")
+}
+func (UnimplementedInputServiceServer) UpdateQuestionInput(context.Context, *UpdateQuestionInputRequest) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuestionInput not implemented")
+}
+func (UnimplementedInputServiceServer) DeleteQuestionInput(context.Context, *DeleteQuestionInputRequest) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestionInput not implemented")
+}
+func (UnimplementedInputServiceServer) mustEmbedUnimplementedInputServiceServer() {}
+
+// UnsafeInputServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to InputServiceServer will
+// result in compilation errors.
+type UnsafeInputServiceServer interface {
+	mustEmbedUnimplementedInputServiceServer()
+}
+
+func RegisterInputServiceServer(s grpc.ServiceRegistrar, srv InputServiceServer) {
+	s.RegisterService(&InputService_ServiceDesc, srv)
+}
+
+func _InputService_CreateQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateQuestionInputRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InputServiceServer).CreateQuestionInput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.InputService/CreateQuestionInput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InputServiceServer).CreateQuestionInput(ctx, req.(*CreateQuestionInputRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InputService_GetQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuestionInputId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InputServiceServer).GetQuestionInput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.InputService/GetQuestionInput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InputServiceServer).GetQuestionInput(ctx, req.(*QuestionInputId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InputService_GetAllQuestionInputsByQuestionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllQuestionInputsByQuestionIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InputServiceServer).GetAllQuestionInputsByQuestionId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.InputService/GetAllQuestionInputsByQuestionId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InputServiceServer).GetAllQuestionInputsByQuestionId(ctx, req.(*GetAllQuestionInputsByQuestionIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InputService_UpdateQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateQuestionInputRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InputServiceServer).UpdateQuestionInput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.InputService/UpdateQuestionInput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InputServiceServer).UpdateQuestionInput(ctx, req.(*UpdateQuestionInputRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InputService_DeleteQuestionInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteQuestionInputRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InputServiceServer).DeleteQuestionInput(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.InputService/DeleteQuestionInput",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InputServiceServer).DeleteQuestionInput(ctx, req.(*DeleteQuestionInputRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// InputService_ServiceDesc is the grpc.ServiceDesc for InputService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var InputService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "question.InputService",
+	HandlerType: (*InputServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateQuestionInput",
-			Handler:    _QuestionService_CreateQuestionInput_Handler,
+			Handler:    _InputService_CreateQuestionInput_Handler,
 		},
 		{
 			MethodName: "GetQuestionInput",
-			Handler:    _QuestionService_GetQuestionInput_Handler,
+			Handler:    _InputService_GetQuestionInput_Handler,
 		},
 		{
 			MethodName: "GetAllQuestionInputsByQuestionId",
-			Handler:    _QuestionService_GetAllQuestionInputsByQuestionId_Handler,
+			Handler:    _InputService_GetAllQuestionInputsByQuestionId_Handler,
 		},
 		{
 			MethodName: "UpdateQuestionInput",
-			Handler:    _QuestionService_UpdateQuestionInput_Handler,
+			Handler:    _InputService_UpdateQuestionInput_Handler,
 		},
 		{
 			MethodName: "DeleteQuestionInput",
-			Handler:    _QuestionService_DeleteQuestionInput_Handler,
+			Handler:    _InputService_DeleteQuestionInput_Handler,
 		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "question.proto",
+}
+
+// TestCaseServiceClient is the client API for TestCaseService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type TestCaseServiceClient interface {
+	CreateTestCase(ctx context.Context, in *CreateTestCaseRequest, opts ...grpc.CallOption) (*TestCaseId, error)
+	GetTestCase(ctx context.Context, in *TestCaseId, opts ...grpc.CallOption) (*GetTestCaseResponse, error)
+	GetAllTestCasesByQuestionId(ctx context.Context, in *GetAllTestCasesByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllTestCasesByQuestionIdResponse, error)
+	UpdateTestCase(ctx context.Context, in *UpdateTestCaseRequest, opts ...grpc.CallOption) (*Void, error)
+	DeleteTestCase(ctx context.Context, in *DeleteTestCaseRequest, opts ...grpc.CallOption) (*Void, error)
+}
+
+type testCaseServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewTestCaseServiceClient(cc grpc.ClientConnInterface) TestCaseServiceClient {
+	return &testCaseServiceClient{cc}
+}
+
+func (c *testCaseServiceClient) CreateTestCase(ctx context.Context, in *CreateTestCaseRequest, opts ...grpc.CallOption) (*TestCaseId, error) {
+	out := new(TestCaseId)
+	err := c.cc.Invoke(ctx, "/question.TestCaseService/CreateTestCase", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *testCaseServiceClient) GetTestCase(ctx context.Context, in *TestCaseId, opts ...grpc.CallOption) (*GetTestCaseResponse, error) {
+	out := new(GetTestCaseResponse)
+	err := c.cc.Invoke(ctx, "/question.TestCaseService/GetTestCase", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *testCaseServiceClient) GetAllTestCasesByQuestionId(ctx context.Context, in *GetAllTestCasesByQuestionIdRequest, opts ...grpc.CallOption) (*GetAllTestCasesByQuestionIdResponse, error) {
+	out := new(GetAllTestCasesByQuestionIdResponse)
+	err := c.cc.Invoke(ctx, "/question.TestCaseService/GetAllTestCasesByQuestionId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *testCaseServiceClient) UpdateTestCase(ctx context.Context, in *UpdateTestCaseRequest, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/question.TestCaseService/UpdateTestCase", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *testCaseServiceClient) DeleteTestCase(ctx context.Context, in *DeleteTestCaseRequest, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/question.TestCaseService/DeleteTestCase", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// TestCaseServiceServer is the server API for TestCaseService service.
+// All implementations must embed UnimplementedTestCaseServiceServer
+// for forward compatibility
+type TestCaseServiceServer interface {
+	CreateTestCase(context.Context, *CreateTestCaseRequest) (*TestCaseId, error)
+	GetTestCase(context.Context, *TestCaseId) (*GetTestCaseResponse, error)
+	GetAllTestCasesByQuestionId(context.Context, *GetAllTestCasesByQuestionIdRequest) (*GetAllTestCasesByQuestionIdResponse, error)
+	UpdateTestCase(context.Context, *UpdateTestCaseRequest) (*Void, error)
+	DeleteTestCase(context.Context, *DeleteTestCaseRequest) (*Void, error)
+	mustEmbedUnimplementedTestCaseServiceServer()
+}
+
+// UnimplementedTestCaseServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedTestCaseServiceServer struct {
+}
+
+func (UnimplementedTestCaseServiceServer) CreateTestCase(context.Context, *CreateTestCaseRequest) (*TestCaseId, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTestCase not implemented")
+}
+func (UnimplementedTestCaseServiceServer) GetTestCase(context.Context, *TestCaseId) (*GetTestCaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTestCase not implemented")
+}
+func (UnimplementedTestCaseServiceServer) GetAllTestCasesByQuestionId(context.Context, *GetAllTestCasesByQuestionIdRequest) (*GetAllTestCasesByQuestionIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllTestCasesByQuestionId not implemented")
+}
+func (UnimplementedTestCaseServiceServer) UpdateTestCase(context.Context, *UpdateTestCaseRequest) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTestCase not implemented")
+}
+func (UnimplementedTestCaseServiceServer) DeleteTestCase(context.Context, *DeleteTestCaseRequest) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTestCase not implemented")
+}
+func (UnimplementedTestCaseServiceServer) mustEmbedUnimplementedTestCaseServiceServer() {}
+
+// UnsafeTestCaseServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TestCaseServiceServer will
+// result in compilation errors.
+type UnsafeTestCaseServiceServer interface {
+	mustEmbedUnimplementedTestCaseServiceServer()
+}
+
+func RegisterTestCaseServiceServer(s grpc.ServiceRegistrar, srv TestCaseServiceServer) {
+	s.RegisterService(&TestCaseService_ServiceDesc, srv)
+}
+
+func _TestCaseService_CreateTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTestCaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TestCaseServiceServer).CreateTestCase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.TestCaseService/CreateTestCase",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TestCaseServiceServer).CreateTestCase(ctx, req.(*CreateTestCaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TestCaseService_GetTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TestCaseId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TestCaseServiceServer).GetTestCase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.TestCaseService/GetTestCase",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TestCaseServiceServer).GetTestCase(ctx, req.(*TestCaseId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TestCaseService_GetAllTestCasesByQuestionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllTestCasesByQuestionIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TestCaseServiceServer).GetAllTestCasesByQuestionId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.TestCaseService/GetAllTestCasesByQuestionId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TestCaseServiceServer).GetAllTestCasesByQuestionId(ctx, req.(*GetAllTestCasesByQuestionIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TestCaseService_UpdateTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTestCaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TestCaseServiceServer).UpdateTestCase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.TestCaseService/UpdateTestCase",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TestCaseServiceServer).UpdateTestCase(ctx, req.(*UpdateTestCaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TestCaseService_DeleteTestCase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTestCaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TestCaseServiceServer).DeleteTestCase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/question.TestCaseService/DeleteTestCase",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TestCaseServiceServer).DeleteTestCase(ctx, req.(*DeleteTestCaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// TestCaseService_ServiceDesc is the grpc.ServiceDesc for TestCaseService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TestCaseService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "question.TestCaseService",
+	HandlerType: (*TestCaseServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateTestCase",
-			Handler:    _QuestionService_CreateTestCase_Handler,
+			Handler:    _TestCaseService_CreateTestCase_Handler,
 		},
 		{
 			MethodName: "GetTestCase",
-			Handler:    _QuestionService_GetTestCase_Handler,
+			Handler:    _TestCaseService_GetTestCase_Handler,
 		},
 		{
 			MethodName: "GetAllTestCasesByQuestionId",
-			Handler:    _QuestionService_GetAllTestCasesByQuestionId_Handler,
+			Handler:    _TestCaseService_GetAllTestCasesByQuestionId_Handler,
 		},
 		{
 			MethodName: "UpdateTestCase",
-			Handler:    _QuestionService_UpdateTestCase_Handler,
+			Handler:    _TestCaseService_UpdateTestCase_Handler,
 		},
 		{
 			MethodName: "DeleteTestCase",
-			Handler:    _QuestionService_DeleteTestCase_Handler,
+			Handler:    _TestCaseService_DeleteTestCase_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

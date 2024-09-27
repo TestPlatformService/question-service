@@ -3,10 +3,12 @@ package mongosh
 import (
 	"context"
 
+	pb "question/genproto/question"
+	"question/storage/repo"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	pb "question/genproto/question"
 )
 
 type TestCase struct {
@@ -20,7 +22,7 @@ type TestCaseRepository struct {
 	Coll *mongo.Collection
 }
 
-func NewTestCaseRepository(db *mongo.Database) *TestCaseRepository {
+func NewTestCaseRepository(db *mongo.Database) repo.ITestCaseStorage {
 	return &TestCaseRepository{Coll: db.Collection("testcase")}
 }
 

@@ -10,7 +10,8 @@ import (
 
 type TopicService struct {
 	storage storage.Istorage
-	logger  *slog.Logger
+	pb.UnimplementedTopicServiceServer
+	logger *slog.Logger
 }
 
 func NewTopicService(storage storage.Istorage, logger *slog.Logger) *TopicService {
