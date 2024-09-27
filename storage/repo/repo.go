@@ -54,3 +54,11 @@ type IOutputStorage interface {
 	UpdateQuestionOutput(context.Context, *pb3.UpdateQuestionOutputRequest) (*pb3.Void, error)
 	DeleteQuestionOutput(context.Context, *pb3.DeleteQuestionOutputRequest) (*pb3.Void, error)
 }
+
+type ITestCaseStorage interface {
+	CreateTestCase(context.Context, *pb3.CreateTestCaseRequest) (*pb3.TestCaseId, error)
+	GetTestCase(context.Context, *pb3.TestCaseId) (*pb3.GetTestCaseResponse, error)
+	GetAllTestCasesByQuestionId(context.Context, *pb3.GetAllTestCasesByQuestionIdRequest) (*pb3.GetAllTestCasesByQuestionIdResponse, error)
+	UpdateTestCase(context.Context, *pb3.UpdateTestCaseRequest) (*pb3.Void, error)
+	DeleteTestCase(context.Context, *pb3.DeleteTestCaseRequest) (*pb3.Void, error)
+}
