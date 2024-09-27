@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"log"
 	"net"
 	"question/config"
+	"question/genproto/question"
 	"question/genproto/subject"
 	"question/genproto/topic"
 	"question/logs"
@@ -11,6 +13,8 @@ import (
 	"question/storage"
 	"question/storage/mongosh"
 	"question/storage/postgres"
+
+	"google.golang.org/grpc"
 )
 
 func main(){
@@ -38,5 +42,22 @@ func main(){
 
 	topicService := service.NewTopicService(storage, logger)
 	subjectService := service.NewSubjectService(logger, storage)
-	caseService := service.NewCaseService()
+	caseService := service.NewCaseService(logger, storage)
+	inputService := service.NewInputService(logger, storage)
+	outputService := service.NewOutputService(logger, storage)
+	questionService := service.NewQuestionService(logger, storage)
+
+	s := grpc.NewServer()
+
+	topic.RegisterTopicServiceServer(s, topicService)
+	subject.RegisterSubjectServiceServer(s, subjectService)
+	question.RegisterTestCaseServiceServer(s, caseService)
+	question.RegisterInputServiceServer(s, inputService)
+	question.RegisterOutputServiceServer(s, outputService)
+	question.RegisterQuestionServiceServer(s, questionService)
+
+	log.Printf("Service is run: %v", cfg.QUESTION_SERVICE)
+	if err = s.Serve(listener); err != nil{
+		panic(err)
+	}
 }
