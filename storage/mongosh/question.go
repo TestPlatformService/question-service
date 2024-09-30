@@ -27,6 +27,9 @@ type Question struct {
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 	DeletedAt   *time.Time         `bson:"deleted_at,omitempty"`
+	Language    string             `bson:"language"`
+	TimeLimit   int64              `bson:"time_limit"`
+	MemoryLimit int64              `bson:"memory_limit"`
 }
 
 type QuestionRepository struct {
@@ -49,6 +52,9 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 		Constraints: req.Constrains,
 		InputInfo:   req.InputInfo,
 		OutputInfo:  req.OutputInfo,
+		Language:    req.Language,    // New field
+		TimeLimit:   req.TimeLimit,   // New field
+		MemoryLimit: req.MemoryLimit, // New field
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -65,6 +71,7 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 
 	return &pb.QuestionId{Id: oid.Hex()}, nil
 }
+
 func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.QuestionId) (*pb.GetQuestionResponse, error) {
 	var question Question
 	err := repo.Coll.FindOne(ctx, bson.M{"_id": id.Id, "deleted_at": bson.M{"$exists": false}}).Decode(&question)
@@ -84,6 +91,9 @@ func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.Question
 		Constrains:  question.Constraints,
 		InputInfo:   question.InputInfo,
 		OutputInfo:  question.OutputInfo,
+		Language:    question.Language,    // New field
+		TimeLimit:   question.TimeLimit,   // New field
+		MemoryLimit: question.MemoryLimit, // New field
 		CreatedAt:   question.CreatedAt.Format(time.RFC3339),
 		UpdatedAt:   question.UpdatedAt.Format(time.RFC3339),
 	}, nil
@@ -99,7 +109,7 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 		filter["type"] = req.Type
 	}
 	if req.Name != "" {
-		filter["name"] = bson.M{"$regex": req.Name, "$options": "i"} // Case insensitive regex for name
+		filter["name"] = bson.M{"$regex": req.Name, "$options": "i"}
 	}
 	if req.Number > 0 {
 		filter["number"] = req.Number
@@ -107,7 +117,9 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 	if req.Difficulty != "" {
 		filter["difficulty"] = req.Difficulty
 	}
-
+	if req.Language != "" {
+		filter["language"] = req.Language
+	}
 	filter["deleted_at"] = bson.M{"$exists": false}
 
 	totalCount, err := repo.Coll.CountDocuments(ctx, filter)
@@ -115,13 +127,11 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 		return nil, err
 	}
 
-	// Calculate pagination values
 	skip := (req.Offset - 1) * req.Limit
 	if skip < 0 {
-		skip = 0 // Ensure skip is not negative
+		skip = 0
 	}
 
-	// Find the questions with limit and offset for pagination
 	cursor, err := repo.Coll.Find(ctx, filter, options.Find().SetLimit(req.Limit).SetSkip(int64(skip)))
 	if err != nil {
 		return nil, err
@@ -147,6 +157,9 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 			Constrains:  question.Constraints,
 			InputInfo:   question.InputInfo,
 			OutputInfo:  question.OutputInfo,
+			Language:    question.Language,    // New field
+			TimeLimit:   question.TimeLimit,   // New field
+			MemoryLimit: question.MemoryLimit, // New field
 			CreatedAt:   question.CreatedAt.Format(time.RFC3339),
 			UpdatedAt:   question.UpdatedAt.Format(time.RFC3339),
 		})
@@ -155,23 +168,26 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 	return &pb.GetAllQuestionsResponse{
 		Questions: questions,
 		Total:     totalCount,
-		Page:      req.Offset, // Return the requested page number
+		Page:      skip,
 	}, nil
 }
 
 func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.UpdateQuestionRequest) (*pb.Void, error) {
 	update := bson.M{
 		"$set": bson.M{
-			"type":        req.Type,
-			"name":        req.Name,
-			"number":      req.Number,
-			"difficulty":  req.Difficulty,
-			"description": req.Description,
-			"image":       req.Image,
-			"constrains":  req.Constrains,
-			"input_info":  req.InputInfo,
-			"output_info": req.OutputInfo,
-			"updated_at":  time.Now(),
+			"type":         req.Type,
+			"name":         req.Name,
+			"number":       req.Number,
+			"difficulty":   req.Difficulty,
+			"description":  req.Description,
+			"image":        req.Image,
+			"constrains":   req.Constrains,
+			"input_info":   req.InputInfo,
+			"output_info":  req.OutputInfo,
+			"language":     req.Language,    // New field
+			"time_limit":   req.TimeLimit,   // New field
+			"memory_limit": req.MemoryLimit, // New field
+			"updated_at":   time.Now(),
 		},
 	}
 
