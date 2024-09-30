@@ -10,17 +10,17 @@ import (
 
 type Config struct {
 	QUESTION_SERVICE string
-	DB_HOST      string
-	DB_PORT      string
-	DB_USER      string
-	DB_PASSWORD  string
-	DB_NAME      string
-	MDB_ADDRESS  string
-	MDB_NAME     string
+	DB_HOST          string
+	DB_PORT          string
+	DB_USER          string
+	DB_PASSWORD      string
+	DB_NAME          string
+	MDB_ADDRESS      string
+	MDB_NAME         string
 }
 
 func LoadConfig() Config {
-	if err := godotenv.Load("./../../.env"); err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		log.Println("error loading .env file or not found", err)
 	}
 
