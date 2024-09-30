@@ -31,7 +31,7 @@ func LoadConfig() Config {
 	config.DB_PORT = cast.ToString(coalesce("DB_PORT", "5432"))
 	config.DB_USER = cast.ToString(coalesce("DB_USER", "postgres"))
 	config.DB_PASSWORD = cast.ToString(coalesce("DB_PASSWORD", "1111"))
-	config.DB_NAME = cast.ToString(coalesce("DB_NAME", "testuzb_question_service"))
+	config.DB_NAME = cast.ToString(coalesce("DB_NAME", "testuzb1_question_service"))
 	config.MDB_ADDRESS = cast.ToString(coalesce("MDB_ADDRESS", "mongodb://localhost:27017"))
 	config.MDB_NAME = cast.ToString(coalesce("MDB_NAME", "testuzb_question_service"))
 
