@@ -24,21 +24,30 @@ func NewTopicRepo(db *sql.DB, logger *slog.Logger) repo.ITopicStorage {
 }
 
 func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, error) {
-	id := uuid.NewString()
-	query := `
-				INSERT INTO subject_topics(
-					id, name, subject_id, description)
-				VALUES
-					($1, $2, $3, $4)`
-	_, err := T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description)
-	if err != nil {
-		T.Logger.Error(err.Error())
-		return nil, err
-	}
-	return &pb.CreateTopicResp{
-		Id:        id,
-		CreatedAt: time.Now().String(),
-	}, nil
+    id := uuid.NewString()
+
+    subjectUUID, err := uuid.Parse(req.SubjectId)
+    if err != nil {
+        T.Logger.Error(fmt.Sprintf("Invalid UUID for subject_id: %v", err))
+        return nil, fmt.Errorf("invalid UUID format for subject_id")
+    }
+
+    query := `
+        INSERT INTO subject_topics(
+            id, name, subject_id, description)
+        VALUES
+            ($1, $2, $3, $4)`
+    
+    _, err = T.DB.Exec(query, id, req.Name, subjectUUID, req.Description)
+    if err != nil {
+        T.Logger.Error(err.Error())
+        return nil, err
+    }
+
+    return &pb.CreateTopicResp{
+        Id:        id,
+        CreatedAt: time.Now().String(),
+    }, nil
 }
 
 func (T *topicRepo) UpdateTopic(req *pb.UpdateTopicReq) (*pb.UpdateTopicResp, error) {
