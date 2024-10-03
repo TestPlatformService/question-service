@@ -88,7 +88,7 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 	if len(req.SubjectId) > 0 {
 		query += fmt.Sprintf(" AND subject_id = '%s'", req.SubjectId)
 	}
-	query += fmt.Sprintf(" limit %d offset %d", req.Limit, req.Offset)
+	query += fmt.Sprintf(" limit %d offset %d", req.Limit, (req.Page-1)*req.Limit)
 	rows, err := T.DB.Query(query)
 	if err != nil {
 		T.Logger.Error(err.Error())
@@ -106,6 +106,7 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 	return &pb.GetAllTopicsResp{
 		Topics: topics,
 		Limit:  req.Limit,
-		Offset: req.Offset,
+		Page: req.Page,
 	}, nil
 }
+

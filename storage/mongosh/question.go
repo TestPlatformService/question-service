@@ -22,9 +22,14 @@ type Question struct {
 	Description string             `bson:"description"`
 	Image       string             `bson:"image"`
 	Constraints string             `bson:"constrains"`
+	InputInfo   string             `bson:"input_info"`
+	OutputInfo  string             `bson:"output_info"`
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 	DeletedAt   *time.Time         `bson:"deleted_at,omitempty"`
+	Language    string             `bson:"language"`
+	TimeLimit   int64              `bson:"time_limit"`
+	MemoryLimit int64              `bson:"memory_limit"`
 }
 
 type QuestionRepository struct {
@@ -45,6 +50,11 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 		Description: req.Description,
 		Image:       req.Image,
 		Constraints: req.Constrains,
+		InputInfo:   req.InputInfo,
+		OutputInfo:  req.OutputInfo,
+		Language:    req.Language,    // New field
+		TimeLimit:   req.TimeLimit,   // New field
+		MemoryLimit: req.MemoryLimit, // New field
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -61,6 +71,7 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 
 	return &pb.QuestionId{Id: oid.Hex()}, nil
 }
+
 func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.QuestionId) (*pb.GetQuestionResponse, error) {
 	var question Question
 	err := repo.Coll.FindOne(ctx, bson.M{"_id": id.Id, "deleted_at": bson.M{"$exists": false}}).Decode(&question)
@@ -69,6 +80,7 @@ func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.Question
 	}
 
 	return &pb.GetQuestionResponse{
+		Id:          question.ID.Hex(),
 		TopicId:     question.TopicID,
 		Type:        question.Type,
 		Name:        question.Name,
@@ -77,6 +89,13 @@ func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.Question
 		Description: question.Description,
 		Image:       question.Image,
 		Constrains:  question.Constraints,
+		InputInfo:   question.InputInfo,
+		OutputInfo:  question.OutputInfo,
+		Language:    question.Language,    // New field
+		TimeLimit:   question.TimeLimit,   // New field
+		MemoryLimit: question.MemoryLimit, // New field
+		CreatedAt:   question.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:   question.UpdatedAt.Format(time.RFC3339),
 	}, nil
 }
 
@@ -90,7 +109,7 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 		filter["type"] = req.Type
 	}
 	if req.Name != "" {
-		filter["name"] = bson.M{"$regex": req.Name, "$options": "i"} // Case insensitive regex for name
+		filter["name"] = bson.M{"$regex": req.Name, "$options": "i"}
 	}
 	if req.Number > 0 {
 		filter["number"] = req.Number
@@ -98,7 +117,9 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 	if req.Difficulty != "" {
 		filter["difficulty"] = req.Difficulty
 	}
-
+	if req.Language != "" {
+		filter["language"] = req.Language
+	}
 	filter["deleted_at"] = bson.M{"$exists": false}
 
 	totalCount, err := repo.Coll.CountDocuments(ctx, filter)
@@ -106,13 +127,11 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 		return nil, err
 	}
 
-	// Calculate pagination values
-	skip := (req.Offset - 1) * req.Limit
+	skip := (req.Page - 1) * req.Limit
 	if skip < 0 {
-		skip = 0 // Ensure skip is not negative
+		skip = 0
 	}
 
-	// Find the questions with limit and offset for pagination
 	cursor, err := repo.Coll.Find(ctx, filter, options.Find().SetLimit(req.Limit).SetSkip(int64(skip)))
 	if err != nil {
 		return nil, err
@@ -127,6 +146,7 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 		}
 
 		questions = append(questions, &pb.GetQuestionResponse{
+			Id:          question.ID.Hex(),
 			TopicId:     question.TopicID,
 			Type:        question.Type,
 			Name:        question.Name,
@@ -135,32 +155,49 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 			Description: question.Description,
 			Image:       question.Image,
 			Constrains:  question.Constraints,
+			InputInfo:   question.InputInfo,
+			OutputInfo:  question.OutputInfo,
+			Language:    question.Language,    // New field
+			TimeLimit:   question.TimeLimit,   // New field
+			MemoryLimit: question.MemoryLimit, // New field
+			CreatedAt:   question.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:   question.UpdatedAt.Format(time.RFC3339),
 		})
 	}
 
 	return &pb.GetAllQuestionsResponse{
 		Questions: questions,
 		Total:     totalCount,
-		Page:      req.Offset, // Return the requested page number
+		Page:      skip,
 	}, nil
 }
 
-// UpdateQuestion updates an existing question
 func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.UpdateQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.Id)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$set": bson.M{
-			"type":        req.Type,
-			"name":        req.Name,
-			"number":      req.Number,
-			"difficulty":  req.Difficulty,
-			"description": req.Description,
-			"image":       req.Image,
-			"constrains":  req.Constrains,
-			"updated_at":  time.Now(),
+			"type":         req.Type,
+			"name":         req.Name,
+			"number":       req.Number,
+			"difficulty":   req.Difficulty,
+			"description":  req.Description,
+			"image":        req.Image,
+			"constrains":   req.Constrains,
+			"input_info":   req.InputInfo,
+			"output_info":  req.OutputInfo,
+			"language":     req.Language,
+			"time_limit":   req.TimeLimit,
+			"memory_limit": req.MemoryLimit,
+			"updated_at":   time.Now(),
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.Id, "deleted_at": bson.M{"$exists": false}}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID, "deleted_at": bson.M{"$exists": false}}, update)
 	if err != nil {
 		return nil, err
 	}
@@ -170,13 +207,19 @@ func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.Upda
 
 // DeleteQuestion marks a question as deleted
 func (repo *QuestionRepository) DeleteQuestion(ctx context.Context, req *pb.DeleteQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.Id)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$set": bson.M{
 			"deleted_at": time.Now(),
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.Id}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID}, update)
 	if err != nil {
 		return nil, err
 	}
@@ -184,15 +227,20 @@ func (repo *QuestionRepository) DeleteQuestion(ctx context.Context, req *pb.Dele
 	return &pb.Void{}, nil
 }
 
-// UploadImageQuestion uploads an image for a question
 func (repo *QuestionRepository) UploadImageQuestion(ctx context.Context, req *pb.UploadImageQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.QuestionId)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$set": bson.M{
 			"image": req.Image,
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.QuestionId, "deleted_at": bson.M{"$exists": false}}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID, "deleted_at": bson.M{"$exists": false}}, update)
 	if err != nil {
 		return nil, err
 	}
@@ -200,15 +248,20 @@ func (repo *QuestionRepository) UploadImageQuestion(ctx context.Context, req *pb
 	return &pb.Void{}, nil
 }
 
-// DeleteImageQuestion removes the image from a question
 func (repo *QuestionRepository) DeleteImageQuestion(ctx context.Context, req *pb.DeleteImageQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.QuestionId)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$unset": bson.M{
-			"image": "",
+			"image": "", // This will remove the image field from the document
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.QuestionId, "deleted_at": bson.M{"$exists": false}}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID, "deleted_at": bson.M{"$exists": false}}, update)
 	if err != nil {
 		return nil, err
 	}

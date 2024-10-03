@@ -1,0 +1,75 @@
+version: '3.9'
+
+services:
+
+  postgres-db:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${PDB_USER}
+      - POSTGRES_PASSWORD=${PDB_PASSWORD}
+      - POSTGRES_DB=${PDB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - testuzb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PDB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  
+  migrate:
+    image: migrate/migrate
+    networks:
+      - testuzb
+    volumes:
+      - ./migrations:/migrations
+    depends_on:
+      - postgres-db
+    command: ["-path", "/migrations", "-database" ,"postgres://${PDB_USER}:${PDB_PASSWORD}@postgres:${PDB_PORT}/${PDB_NAME}?sslmode=disable","up"]
+
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongo_new
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example 
+    volumes:
+      - db2:/data/db
+    networks:
+      - testuzb
+
+  questionservice:
+    container_name: questionservice
+    build: .
+    ports:
+      - "50053:50053"
+    networks:
+      - testuzb
+    depends_on:
+      - mongodb
+      - postgres-db
+      - migrate
+    healthcheck:
+      test: ["CMD-SHELL", "grpc_health_probe -addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+networks:
+  testuzb:
+    external: true
+
+volumes:
+  db:
+    driver: local
+  db2:
+    driver: local

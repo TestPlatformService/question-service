@@ -60,7 +60,7 @@ func TestGetAllSubjects(t *testing.T) {
 
 	req := &pb.GetAllSubjectsRequest{
 		Limit: 2,
-		Offset: 1,
+		Page: 1,
 	}
 
 	res, err := repo.GetAllSubjects(context.Background(), req)

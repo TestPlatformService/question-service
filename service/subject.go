@@ -40,6 +40,16 @@ func (s *SubjectService) GetSubject(ctx context.Context, req *pb.GetSubjectReque
 	return res, nil
 }
 
+func (s *SubjectService) GetAllSubjects(ctx context.Context, req *pb.GetAllSubjectsRequest) (*pb.GetAllSubjectsResponse, error) {
+	resp, err := s.Subject.Subject().GetAllSubjects(ctx, req)
+	if err != nil {
+		s.Logger.Error("failed to get all subjects", "error", err)
+		return nil, err
+	}
+
+	return resp, err
+}
+
 func (s *SubjectService) UpdateSubject(ctx context.Context, req *pb.UpdateSubjectRequest) (*pb.Void, error) {
 	_, err := s.Subject.Subject().UpdateSubject(ctx, req)
 	if err != nil {

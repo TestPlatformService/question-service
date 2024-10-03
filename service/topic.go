@@ -56,3 +56,4 @@ func (T *TopicService) GetAllTopics(ctx context.Context, req *pb.GetAllTopicsReq
 	}
 	return resp, nil
 }
+

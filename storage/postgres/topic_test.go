@@ -59,7 +59,7 @@ func Test_GetAllTopics(t *testing.T){
 	_, err := topic.GetAllTopics(&pb.GetAllTopicsReq{
 		SubjectId: "6c4f4072-db59-4fab-a584-6e6b7b50be61",
 		Limit: 10,
-		Offset: 0,
+		Page: 1,
 	})
 	if err != nil{
 		t.Fatal(err)
