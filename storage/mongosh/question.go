@@ -227,15 +227,20 @@ func (repo *QuestionRepository) DeleteQuestion(ctx context.Context, req *pb.Dele
 	return &pb.Void{}, nil
 }
 
-// UploadImageQuestion uploads an image for a question
 func (repo *QuestionRepository) UploadImageQuestion(ctx context.Context, req *pb.UploadImageQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.QuestionId)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$set": bson.M{
 			"image": req.Image,
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.QuestionId, "deleted_at": bson.M{"$exists": false}}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID, "deleted_at": bson.M{"$exists": false}}, update)
 	if err != nil {
 		return nil, err
 	}
@@ -243,15 +248,20 @@ func (repo *QuestionRepository) UploadImageQuestion(ctx context.Context, req *pb
 	return &pb.Void{}, nil
 }
 
-// DeleteImageQuestion removes the image from a question
 func (repo *QuestionRepository) DeleteImageQuestion(ctx context.Context, req *pb.DeleteImageQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.QuestionId)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$unset": bson.M{
-			"image": "",
+			"image": "", // This will remove the image field from the document
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.QuestionId, "deleted_at": bson.M{"$exists": false}}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID, "deleted_at": bson.M{"$exists": false}}, update)
 	if err != nil {
 		return nil, err
 	}
