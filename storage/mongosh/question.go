@@ -173,6 +173,12 @@ func (repo *QuestionRepository) GetAllQuestions(ctx context.Context, req *pb.Get
 }
 
 func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.UpdateQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.Id)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$set": bson.M{
 			"type":         req.Type,
@@ -184,14 +190,14 @@ func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.Upda
 			"constrains":   req.Constrains,
 			"input_info":   req.InputInfo,
 			"output_info":  req.OutputInfo,
-			"language":     req.Language,    // New field
-			"time_limit":   req.TimeLimit,   // New field
-			"memory_limit": req.MemoryLimit, // New field
+			"language":     req.Language,
+			"time_limit":   req.TimeLimit,
+			"memory_limit": req.MemoryLimit,
 			"updated_at":   time.Now(),
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.Id, "deleted_at": bson.M{"$exists": false}}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID, "deleted_at": bson.M{"$exists": false}}, update)
 	if err != nil {
 		return nil, err
 	}
@@ -201,13 +207,19 @@ func (repo *QuestionRepository) UpdateQuestion(ctx context.Context, req *pb.Upda
 
 // DeleteQuestion marks a question as deleted
 func (repo *QuestionRepository) DeleteQuestion(ctx context.Context, req *pb.DeleteQuestionRequest) (*pb.Void, error) {
+	// Convert string ID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(req.Id)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
+
 	update := bson.M{
 		"$set": bson.M{
 			"deleted_at": time.Now(),
 		},
 	}
 
-	_, err := repo.Coll.UpdateOne(ctx, bson.M{"_id": req.Id}, update)
+	_, err = repo.Coll.UpdateOne(ctx, bson.M{"_id": objectID}, update)
 	if err != nil {
 		return nil, err
 	}
