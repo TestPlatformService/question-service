@@ -3,6 +3,7 @@ package mongosh
 import (
 	"context"
 	pb "question/genproto/question"
+	"question/genproto/task"
 	"question/storage/repo"
 	"time"
 
@@ -286,3 +287,54 @@ func (repo *QuestionRepository) IsQuestionExist(ctx context.Context, id *pb.Ques
 
 	return &pb.Void{}, nil
 }
+
+func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []string) ([]*task.Question, error) {
+	var objectIDs []primitive.ObjectID
+	for _, id := range ids {
+		oid, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			return nil, err // Agar ID konvertatsiya qilishda xato bo'lsa, xato qaytaramiz
+		}
+		objectIDs = append(objectIDs, oid)
+	}
+
+	// MongoDB dan savollarni olish
+	cursor, err := repo.Coll.Find(ctx, bson.M{"_id": bson.M{"$in": objectIDs}})
+	if err != nil {
+		return nil, err // Agar so'rovda xato bo'lsa, xato qaytaramiz
+	}
+	defer cursor.Close(ctx)
+
+	var questions []*task.Question
+	for cursor.Next(ctx) {
+		var question Question
+		if err := cursor.Decode(&question); err != nil {
+			return nil, err // Agar dekodlashda xato bo'lsa, xato qaytaramiz
+		}
+
+		// task.Question formatida natijalarni qo'shamiz
+		questions = append(questions, &task.Question{
+			Id:          question.ID.Hex(),
+			TopicId:     question.TopicID,
+			Type:        question.Type,
+			Name:        question.Name,
+			Number:      question.Number,
+			Difficulty:  question.Difficulty,
+			Description: question.Description,
+			Image:       question.Image,
+			Constrains:  question.Constraints,
+			InputInfo:   question.InputInfo,
+			OutputInfo:  question.OutputInfo,
+			Language:    question.Language,
+			TimeLimit:   question.TimeLimit,
+			MemoryLimit: question.MemoryLimit,
+		})
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err // Agar kursor ishlashida xato bo'lsa, xato qaytaramiz
+	}
+
+	return questions, nil // Savollar ro'yxatini qaytaramiz
+}
+

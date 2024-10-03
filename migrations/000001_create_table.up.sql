@@ -19,3 +19,13 @@ CREATE TABLE subject_topics (
     updated_at TIMESTAMP DEFAULT NOW(),
     deleted_at TIMESTAMP
 );
+
+CREATE TABLE user_tasks (
+    id UUID, 
+    user_id UUID,
+    question_id UUID, 
+    topic_id UUID REFERENCES subject_topics(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP
+);

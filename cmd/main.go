@@ -7,6 +7,7 @@ import (
 	"question/config"
 	"question/genproto/question"
 	"question/genproto/subject"
+	"question/genproto/task"
 	"question/genproto/topic"
 	"question/logs"
 	"question/service"
@@ -46,6 +47,7 @@ func main(){
 	inputService := service.NewInputService(logger, storage)
 	outputService := service.NewOutputService(logger, storage)
 	questionService := service.NewQuestionService(logger, storage)
+	taskService := service.NewTaskService(storage, logger)
 
 	s := grpc.NewServer()
 
@@ -55,6 +57,7 @@ func main(){
 	question.RegisterInputServiceServer(s, inputService)
 	question.RegisterOutputServiceServer(s, outputService)
 	question.RegisterQuestionServiceServer(s, questionService)
+	task.RegisterTaskServiceServer(s, taskService)
 
 	log.Printf("Service is run: %v", cfg.QUESTION_SERVICE)
 	if err = s.Serve(listener); err != nil{

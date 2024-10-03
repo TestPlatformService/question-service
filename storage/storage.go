@@ -18,6 +18,7 @@ type Istorage interface {
 	TestCase() repo.ITestCaseStorage
 	Subject() repo.ISubjectStorage
 	Topic() repo.ITopicStorage
+	Task() repo.ITaskStorage
 }
 
 type StoragePro struct {
