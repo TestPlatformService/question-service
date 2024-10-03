@@ -17,6 +17,7 @@ type Config struct {
 	DB_NAME      string
 	MDB_ADDRESS  string
 	MDB_NAME     string
+	USER_SERVICE string
 }
 
 func LoadConfig() Config {
@@ -34,6 +35,7 @@ func LoadConfig() Config {
 	config.DB_NAME = cast.ToString(coalesce("DB_NAME", "testuzb_question_service"))
 	config.MDB_ADDRESS = cast.ToString(coalesce("MDB_ADDRESS", "mongodb://localhost:27017"))
 	config.MDB_NAME = cast.ToString(coalesce("MDB_NAME", "testuzb_question_service"))
+	config.USER_SERVICE = cast.ToString(coalesce("USER_SERVICE", ""))
 
 	return config
 }

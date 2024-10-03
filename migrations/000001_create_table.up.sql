@@ -14,6 +14,7 @@ CREATE TABLE subject_topics (
     subject_id UUID REFERENCES subjects(id) ON DELETE CASCADE,
     name VARCHAR NOT NULL,
     description TEXT,
+    question_count int,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     deleted_at TIMESTAMP
