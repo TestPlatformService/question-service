@@ -7,8 +7,6 @@ import (
 	pb "question/genproto/topic"
 	"question/storage/repo"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type topicRepo struct {
@@ -24,30 +22,25 @@ func NewTopicRepo(db *sql.DB, logger *slog.Logger) repo.ITopicStorage {
 }
 
 func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, error) {
-    id := uuid.NewString()
+	query := `
+				INSERT INTO subject_topics(
+					name, subject_id, description)
+				VALUES
+					($1, $2, $3)
+				RETURNING id`
 
-    subjectUUID, err := uuid.Parse(req.SubjectId)
-    if err != nil {
-        T.Logger.Error(fmt.Sprintf("Invalid UUID for subject_id: %v", err))
-        return nil, fmt.Errorf("invalid UUID format for subject_id")
-    }
+	var id string
 
-    query := `
-        INSERT INTO subject_topics(
-            id, name, subject_id, description)
-        VALUES
-            ($1, $2, $3, $4)`
-    
-    _, err = T.DB.Exec(query, id, req.Name, subjectUUID, req.Description)
-    if err != nil {
-        T.Logger.Error(err.Error())
-        return nil, err
-    }
+	err := T.DB.QueryRow(query, req.Name, req.SubjectId, req.Description).Scan(&id)
+	if err != nil {
+		T.Logger.Error(err.Error())
+		return nil, err
+	}
 
-    return &pb.CreateTopicResp{
-        Id:        id,
-        CreatedAt: time.Now().String(),
-    }, nil
+	return &pb.CreateTopicResp{
+		Id:        id,
+		CreatedAt: time.Now().String(),
+	}, nil
 }
 
 func (T *topicRepo) UpdateTopic(req *pb.UpdateTopicReq) (*pb.UpdateTopicResp, error) {
@@ -121,15 +114,14 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 				WHERE
 					deleted_at IS NULL`
 	err = T.DB.QueryRow(query).Scan(&count)
-	if err != nil{
+	if err != nil {
 		T.Logger.Error(err.Error())
 		return nil, err
 	}
 	return &pb.GetAllTopicsResp{
 		Topics: topics,
 		Limit:  req.Limit,
-		Page: req.Page,
-		Count: count,
+		Page:   req.Page,
+		Count:  count,
 	}, nil
 }
-
