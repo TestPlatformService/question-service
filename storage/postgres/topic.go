@@ -103,10 +103,24 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 		}
 		topics = append(topics, &topic)
 	}
+	var count int32
+	query = `
+				SELECT 
+					COUNT(id)
+				FROM 
+					subject_topics
+				WHERE
+					deleted_at IS NULL`
+	err = T.DB.QueryRow(query).Scan(&count)
+	if err != nil{
+		T.Logger.Error(err.Error())
+		return nil, err
+	}
 	return &pb.GetAllTopicsResp{
 		Topics: topics,
 		Limit:  req.Limit,
 		Page: req.Page,
+		Count: count,
 	}, nil
 }
 

@@ -5,6 +5,7 @@ import (
 	pb3 "question/genproto/question"
 	pb "question/genproto/subject"
 	pb2 "question/genproto/topic"
+	pb4 "question/genproto/task"
 )
 
 type IStorage interface {
@@ -61,4 +62,10 @@ type ITestCaseStorage interface {
 	GetAllTestCasesByQuestionId(context.Context, *pb3.GetAllTestCasesByQuestionIdRequest) (*pb3.GetAllTestCasesByQuestionIdResponse, error)
 	UpdateTestCase(context.Context, *pb3.UpdateTestCaseRequest) (*pb3.Void, error)
 	DeleteTestCase(context.Context, *pb3.DeleteTestCaseRequest) (*pb3.Void, error)
+}
+
+type ITaskStorage interface{
+	CreateTask(req *pb4.CreateTaskReq) (*pb4.CreateTaskResp, error) 
+	DeleteTask(req *pb4.DeleteTaskReq) (*pb4.DeleteTaskResp, error)
+	GetTask(req *pb4.GetTaskReq) ([]string, error) 
 }

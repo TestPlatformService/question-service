@@ -33,6 +33,7 @@ const (
 	GroupService_GetGroupStudents_FullMethodName       = "/group.GroupService/GetGroupStudents"
 	GroupService_CreateGroupDay_FullMethodName         = "/group.GroupService/CreateGroupDay"
 	GroupService_DeleteGroupDay_FullMethodName         = "/group.GroupService/DeleteGroupDay"
+	GroupService_StartLesson_FullMethodName            = "/group.GroupService/StartLesson"
 )
 
 // GroupServiceClient is the client API for GroupService service.
@@ -53,6 +54,7 @@ type GroupServiceClient interface {
 	GetGroupStudents(ctx context.Context, in *GroupId, opts ...grpc.CallOption) (*GroupStudents, error)
 	CreateGroupDay(ctx context.Context, in *CreateGroupDayReq, opts ...grpc.CallOption) (*CreateGroupDayResp, error)
 	DeleteGroupDay(ctx context.Context, in *DeleteGroupDayReq, opts ...grpc.CallOption) (*DeleteGroupDayResp, error)
+	StartLesson(ctx context.Context, in *StartLessonReq, opts ...grpc.CallOption) (*StartLessonResp, error)
 }
 
 type groupServiceClient struct {
@@ -203,6 +205,16 @@ func (c *groupServiceClient) DeleteGroupDay(ctx context.Context, in *DeleteGroup
 	return out, nil
 }
 
+func (c *groupServiceClient) StartLesson(ctx context.Context, in *StartLessonReq, opts ...grpc.CallOption) (*StartLessonResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(StartLessonResp)
+	err := c.cc.Invoke(ctx, GroupService_StartLesson_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GroupServiceServer is the server API for GroupService service.
 // All implementations must embed UnimplementedGroupServiceServer
 // for forward compatibility
@@ -221,6 +233,7 @@ type GroupServiceServer interface {
 	GetGroupStudents(context.Context, *GroupId) (*GroupStudents, error)
 	CreateGroupDay(context.Context, *CreateGroupDayReq) (*CreateGroupDayResp, error)
 	DeleteGroupDay(context.Context, *DeleteGroupDayReq) (*DeleteGroupDayResp, error)
+	StartLesson(context.Context, *StartLessonReq) (*StartLessonResp, error)
 	mustEmbedUnimplementedGroupServiceServer()
 }
 
@@ -269,6 +282,9 @@ func (UnimplementedGroupServiceServer) CreateGroupDay(context.Context, *CreateGr
 }
 func (UnimplementedGroupServiceServer) DeleteGroupDay(context.Context, *DeleteGroupDayReq) (*DeleteGroupDayResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroupDay not implemented")
+}
+func (UnimplementedGroupServiceServer) StartLesson(context.Context, *StartLessonReq) (*StartLessonResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StartLesson not implemented")
 }
 func (UnimplementedGroupServiceServer) mustEmbedUnimplementedGroupServiceServer() {}
 
@@ -535,6 +551,24 @@ func _GroupService_DeleteGroupDay_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GroupService_StartLesson_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartLessonReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServiceServer).StartLesson(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GroupService_StartLesson_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServiceServer).StartLesson(ctx, req.(*StartLessonReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GroupService_ServiceDesc is the grpc.ServiceDesc for GroupService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -597,6 +631,10 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteGroupDay",
 			Handler:    _GroupService_DeleteGroupDay_Handler,
+		},
+		{
+			MethodName: "StartLesson",
+			Handler:    _GroupService_StartLesson_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

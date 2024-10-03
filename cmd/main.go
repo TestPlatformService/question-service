@@ -32,7 +32,7 @@ func main(){
 		panic(err)
 	}
 
-	storage := storage.NewStoragePro(mdb, db)
+	storage := storage.NewStoragePro(mdb, db, logger)
 
 	listener, err := net.Listen("tcp", cfg.QUESTION_SERVICE)
 	if err != nil{
