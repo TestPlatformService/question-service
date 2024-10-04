@@ -66,6 +66,11 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 				VALUES
 					($1, $2, $3)`
 	students, err := grp.GetGroupStudents(context.Background(), &group.GroupId{Id: req.GroupId})
+	if err != nil {
+		T.Logger.Error(err.Error())
+		tr.Rollback()
+		return nil, err
+	}
 	for _, student := range students.Students {
 		questions := []string{}
 		rows, err := tr.Query(query, questionCount)
