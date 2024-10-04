@@ -86,7 +86,7 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 				FROM 
 					subject_topics
 				WHERE 
-					deleted_at IS NULL`
+					deleted_at IS NULL`// filter toliq tugatilmagan
 	if len(req.SubjectId) > 0 {
 		query += fmt.Sprintf(" AND subject_id = '%s'", req.SubjectId)
 	}

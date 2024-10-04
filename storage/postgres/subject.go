@@ -65,8 +65,23 @@ func (s *subjectRepo) GetAllSubjects(ctx context.Context, req *pb.GetAllSubjects
 		return nil, err
 	}
 
+	var count int64
+	query = `
+			SELECT 
+				COUNT(id)
+			FROM 
+				groups
+			WHERE
+				deleted_at IS NULL`
+	err = s.DB.QueryRow(query).Scan(&count)
+	if err != nil {
+		s.Log.Error(err.Error())
+		return nil, err
+	}
+
 	return &pb.GetAllSubjectsResponse{
 		Subjects: subjects,
+		Count: count,
 	}, nil
 }
 
