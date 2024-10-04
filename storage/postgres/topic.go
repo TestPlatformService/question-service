@@ -84,14 +84,14 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 		Page:  req.Page,
 	}
 
-	// Base query
+	// Base query for topics
 	baseQuery := `
         SELECT id, subject_id, name, description, created_at
         FROM subject_topics
         WHERE deleted_at IS NULL
     `
 
-	// Base count query
+	// Base query for count
 	countQuery := `
         SELECT COUNT(*)
         FROM subject_topics
@@ -102,6 +102,7 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 	filters := []interface{}{}
 	conditions := ""
 
+	// Add subject_id filter if provided
 	if req.SubjectId != "" {
 		conditions += " AND subject_id = $1"
 		filters = append(filters, req.SubjectId)
@@ -111,11 +112,17 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 	offset := (req.Page - 1) * req.Limit
 	filters = append(filters, req.Limit, offset)
 
-	// Final query with filters and pagination
-	finalQuery := baseQuery + conditions + " LIMIT $2 OFFSET $3"
+	// Adjust placeholders depending on whether the filter is present
+	if req.SubjectId != "" {
+		// When subject_id is provided, LIMIT is $2 and OFFSET is $3
+		baseQuery += conditions + " LIMIT $2 OFFSET $3"
+	} else {
+		// When no subject_id, LIMIT is $1 and OFFSET is $2
+		baseQuery += " LIMIT $1 OFFSET $2"
+	}
 
-	// Execute the final query
-	rows, err := T.DB.Query(finalQuery, filters...)
+	// Execute the query for topics
+	rows, err := T.DB.Query(baseQuery, filters...)
 	if err != nil {
 		return nil, err
 	}
@@ -142,15 +149,22 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 		return nil, err
 	}
 
-	// Count total topics (without limit and offset)
-	countQueryFinal := countQuery + conditions
+	// Query for total count
+	if req.SubjectId != "" {
+		countQuery += conditions
+	}
 	var totalCount int
-	err = T.DB.QueryRow(countQueryFinal, filters[0]).Scan(&totalCount)
+	err = T.DB.QueryRow(countQuery, filters[0]).Scan(&totalCount)
+	if err != nil && req.SubjectId == "" {
+		// No filter case, execute count query without subject_id filter
+		err = T.DB.QueryRow(countQuery).Scan(&totalCount)
+	}
+
 	if err != nil {
 		return nil, err
 	}
 
-	// Set the total count in response
+	// Set total count in the response
 	resp.Count = int32(totalCount)
 
 	return resp, nil
