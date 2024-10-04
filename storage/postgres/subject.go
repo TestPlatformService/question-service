@@ -70,7 +70,7 @@ func (s *subjectRepo) GetAllSubjects(ctx context.Context, req *pb.GetAllSubjects
 			SELECT 
 				COUNT(id)
 			FROM 
-				groups
+				subjects
 			WHERE
 				deleted_at IS NULL`
 	err = s.DB.QueryRow(query).Scan(&count)
