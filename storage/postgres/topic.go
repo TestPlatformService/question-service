@@ -46,7 +46,7 @@ func (T *topicRepo) UpdateTopic(req *pb.UpdateTopicReq) (*pb.UpdateTopicResp, er
 					name = $1, subject_id = $2, description = $3, updated_at = $5, question_count = $6
 				WHERE 
 					id = $4 AND deleted_at IS NULL`
-	_, err := T.DB.Exec(query, req.Name, req.SubjectId, req.Description, req.Id, time.Now(), req.QuestionCount)
+	_, err := T.DB.Exec(query, req.Name, req.SubjectId, req.Description, req.Id, time.Now(), int(req.QuestionCount))
 	if err != nil {
 		T.Logger.Error(err.Error())
 		return nil, err
