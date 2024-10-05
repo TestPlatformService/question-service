@@ -44,9 +44,9 @@ func NewQuestionRepository(db *mongo.Database) repo.IQuestionStorage {
 func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.CreateQuestionRequest) (*pb.QuestionId, error) {
 	question := Question{
 		TopicID:     req.TopicId,
-		Type:        req.Type,
+		Type:        "",////////////////////////////////////////////////////////////////
 		Name:        req.Name,
-		Number:      req.Number,
+		Number:      0,
 		Difficulty:  req.Difficulty,
 		Description: req.Description,
 		Image:       req.Image,
@@ -54,8 +54,8 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 		InputInfo:   req.InputInfo,
 		OutputInfo:  req.OutputInfo,
 		Language:    req.Language,    // New field
-		TimeLimit:   req.TimeLimit,   // New field
-		MemoryLimit: req.MemoryLimit, // New field
+		TimeLimit:   0,   // New field
+		MemoryLimit: 0, // New field
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
