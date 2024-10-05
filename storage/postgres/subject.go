@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"log/slog"
 	pb "question/genproto/subject"
 	"question/logs"
@@ -42,8 +43,13 @@ func (s *subjectRepo) GetSubject(ctx context.Context, req *pb.GetSubjectRequest)
 }
 
 func (s *subjectRepo) GetAllSubjects(ctx context.Context, req *pb.GetAllSubjectsRequest) (*pb.GetAllSubjectsResponse, error) {
+	if req.Page < 1 || req.Limit < 1 {
+		return nil, errors.New("invalid pagination parameters")
+	}
+
+	offset := (req.Page - 1) * req.Limit
 	query := `SELECT id, name, description FROM subjects WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2`
-	rows, err := s.DB.QueryContext(ctx, query, req.Limit, req.Page)
+	rows, err := s.DB.QueryContext(ctx, query, req.Limit, offset)
 	if err != nil {
 		s.Log.Error("failed to get all subjects", "error", err)
 		return nil, err
@@ -65,8 +71,17 @@ func (s *subjectRepo) GetAllSubjects(ctx context.Context, req *pb.GetAllSubjects
 		return nil, err
 	}
 
+	var count int64
+	query = `SELECT COUNT(id) FROM subjects WHERE deleted_at IS NULL`
+	err = s.DB.QueryRowContext(ctx, query).Scan(&count)
+	if err != nil {
+		s.Log.Error("failed to get subject count", "error", err)
+		return nil, err
+	}
+
 	return &pb.GetAllSubjectsResponse{
 		Subjects: subjects,
+		Count:    count,
 	}, nil
 }
 

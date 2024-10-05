@@ -2,13 +2,10 @@ package postgres
 
 import (
 	"database/sql"
-	"fmt"
 	"log/slog"
 	pb "question/genproto/topic"
 	"question/storage/repo"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type topicRepo struct {
@@ -24,7 +21,6 @@ func NewTopicRepo(db *sql.DB, logger *slog.Logger) repo.ITopicStorage {
 }
 
 func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, error) {
-	id := uuid.NewString()
 	query := `
 				INSERT INTO subject_topics(
 					id, name, subject_id, description, question_count)
@@ -35,6 +31,7 @@ func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, er
 		T.Logger.Error(err.Error())
 		return nil, err
 	}
+
 	return &pb.CreateTopicResp{
 		Id:        id,
 		CreatedAt: time.Now().String(),
@@ -88,39 +85,59 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 	if len(req.SubjectId) > 0 {
 		query += fmt.Sprintf(" AND subject_id = '%s'", req.SubjectId)
 	}
-	query += fmt.Sprintf(" limit %d offset %d", req.Limit, (req.Page-1)*req.Limit)
-	rows, err := T.DB.Query(query)
+
+	// Pagination: Calculate offset based on page and limit
+	offset := (req.Page - 1) * req.Limit
+	filters = append(filters, req.Limit, offset)
+
+	// Adjust placeholders depending on whether the filter is present
+	if req.SubjectId != "" {
+		// When subject_id is provided, LIMIT is $2 and OFFSET is $3
+		baseQuery += conditions + " LIMIT $2 OFFSET $3"
+	} else {
+		// When no subject_id, LIMIT is $1 and OFFSET is $2
+		baseQuery += " LIMIT $1 OFFSET $2"
+	}
+
+	// Execute the query for topics
+	rows, err := T.DB.Query(baseQuery, filters...)
 	if err != nil {
-		T.Logger.Error(err.Error())
 		return nil, err
 	}
+	defer rows.Close()
+
+	// Collect topics
 	for rows.Next() {
 		var topic = pb.Topic{}
 		err = rows.Scan(&topic.Id, &topic.Name, &topic.SubjectId, &topic.Description, &topic.QuestionCount)
 		if err != nil {
-			T.Logger.Error(err.Error())
 			return nil, err
 		}
-		topics = append(topics, &topic)
+		resp.Topics = append(resp.Topics, &topic)
 	}
-	var count int32
-	query = `
-				SELECT 
-					COUNT(id)
-				FROM 
-					subject_topics
-				WHERE
-					deleted_at IS NULL`
-	err = T.DB.QueryRow(query).Scan(&count)
-	if err != nil{
-		T.Logger.Error(err.Error())
+
+	// Error check for rows
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-	return &pb.GetAllTopicsResp{
-		Topics: topics,
-		Limit:  req.Limit,
-		Page: req.Page,
-		Count: count,
-	}, nil
-}
 
+	// Query for total count
+	if req.SubjectId != "" {
+		countQuery += conditions
+	}
+	var totalCount int
+	err = T.DB.QueryRow(countQuery, filters[0]).Scan(&totalCount)
+	if err != nil && req.SubjectId == "" {
+		// No filter case, execute count query without subject_id filter
+		err = T.DB.QueryRow(countQuery).Scan(&totalCount)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Set total count in the response
+	resp.Count = int32(totalCount)
+
+	return resp, nil
+}
