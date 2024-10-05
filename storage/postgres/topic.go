@@ -29,7 +29,7 @@ func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, er
 					id, name, subject_id, description, question_count)
 				VALUES
 					($1, $2, $3, $4, $5)`
-	_, err := T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description, req.QuestionCount)
+	_, err := T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description, int(req.QuestionCount))
 	if err != nil {
 		T.Logger.Error(err.Error())
 		return nil, err
