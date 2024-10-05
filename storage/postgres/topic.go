@@ -1,7 +1,6 @@
 package postgres
 
 import (
-	"context"
 	"database/sql"
 	"log/slog"
 	pb "question/genproto/topic"
@@ -77,53 +76,79 @@ func (T *topicRepo) DeleteTopic(req *pb.DeleteTopicReq) (*pb.DeleteTopicResp, er
 }
 
 func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp, error) {
-	var topics = []*pb.Topic{}
-	query := `
-		SELECT 
-			id, name, subject_id, description, question_count
-		FROM 
-			subject_topics
-		WHERE 
-			deleted_at IS NULL`
-
-	if len(req.SubjectId) > 0 {
-		query += " AND subject_id = ?"
+	resp := &pb.GetAllTopicsResp{
+		Limit: req.Limit,
+		Page:  req.Page,
 	}
-	query += " LIMIT ? OFFSET ?"
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	baseQuery := `
+        SELECT id, subject_id, name, description, created_at
+        FROM subject_topics
+        WHERE deleted_at IS NULL
+    `
 
-	rows, err := T.DB.QueryContext(ctx, query, req.SubjectId, req.Limit, (req.Page-1)*req.Limit)
+	countQuery := `
+        SELECT COUNT(*)
+        FROM subject_topics
+        WHERE deleted_at IS NULL
+    `
+
+	filters := []interface{}{}
+	conditions := ""
+
+	if req.SubjectId != "" {
+		conditions += " AND subject_id = $1"
+		filters = append(filters, req.SubjectId)
+	}
+
+	offset := (req.Page - 1) * req.Limit
+	filters = append(filters, req.Limit, offset)
+
+	if req.SubjectId != "" {
+		baseQuery += conditions + " LIMIT $2 OFFSET $3"
+	} else {
+		baseQuery += " LIMIT $1 OFFSET $2"
+	}
+
+	rows, err := T.DB.Query(baseQuery, filters...)
 	if err != nil {
-		T.Logger.Error(err.Error())
 		return nil, err
 	}
-	defer rows.Close() // Resurslarni tozalash
+	defer rows.Close()
 
 	for rows.Next() {
 		var topic pb.Topic
-		if err = rows.Scan(&topic.Id, &topic.Name, &topic.SubjectId, &topic.Description, &topic.QuestionCount); err != nil {
-			T.Logger.Error(err.Error())
+		err := rows.Scan(
+			&topic.Id,
+			&topic.SubjectId,
+			&topic.Name,
+			&topic.Description,
+			&topic.CreatedAt,
+		)
+		if err != nil {
 			return nil, err
 		}
-		topics = append(topics, &topic)
+		resp.Topics = append(resp.Topics, &topic)
 	}
 
-	var count int32
-	countQuery := `
-		SELECT COUNT(id)
-		FROM subject_topics
-		WHERE deleted_at IS NULL`
-	if err = T.DB.QueryRowContext(ctx, countQuery).Scan(&count); err != nil {
-		T.Logger.Error(err.Error())
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return &pb.GetAllTopicsResp{
-		Topics: topics,
-		Limit:  req.Limit,
-		Page:   req.Page,
-		Count:  count,
-	}, nil
+	if req.SubjectId != "" {
+		countQuery += conditions
+	}
+	var totalCount int
+	err = T.DB.QueryRow(countQuery, filters[0]).Scan(&totalCount)
+	if err != nil && req.SubjectId == "" {
+		err = T.DB.QueryRow(countQuery).Scan(&totalCount)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp.Count = int32(totalCount)
+
+	return resp, nil
 }
