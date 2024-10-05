@@ -27,10 +27,10 @@ func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, er
 	id := uuid.NewString()
 	query := `
 				INSERT INTO subject_topics(
-					id, name, subject_id, description)
+					id, name, subject_id, description, question_count)
 				VALUES
 					($1, $2, $3, $4)`
-	_, err := T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description)
+	_, err := T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description, req.QuestionCount)
 	if err != nil {
 		T.Logger.Error(err.Error())
 		return nil, err
@@ -44,10 +44,10 @@ func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, er
 func (T *topicRepo) UpdateTopic(req *pb.UpdateTopicReq) (*pb.UpdateTopicResp, error) {
 	query := `
 				UPDATE subject_topics SET
-					name = $1, subject_id = $2, description = $3, updated_at = $5
+					name = $1, subject_id = $2, description = $3, updated_at = $5, question_count = $6
 				WHERE 
 					id = $4 AND deleted_at IS NULL`
-	_, err := T.DB.Exec(query, req.Name, req.SubjectId, req.Description, req.Id, time.Now())
+	_, err := T.DB.Exec(query, req.Name, req.SubjectId, req.Description, req.Id, time.Now(), req.QuestionCount)
 	if err != nil {
 		T.Logger.Error(err.Error())
 		return nil, err
@@ -80,7 +80,7 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 	var topics = []*pb.Topic{}
 	query := `
 				SELECT 
-					id, name, subject_id, description
+					id, name, subject_id, description, question_count
 				FROM 
 					subject_topics
 				WHERE 
@@ -96,7 +96,7 @@ func (T *topicRepo) GetAllTopics(req *pb.GetAllTopicsReq) (*pb.GetAllTopicsResp,
 	}
 	for rows.Next() {
 		var topic = pb.Topic{}
-		err = rows.Scan(&topic.Id, &topic.Name, &topic.SubjectId, &topic.Description)
+		err = rows.Scan(&topic.Id, &topic.Name, &topic.SubjectId, &topic.Description, &topic.QuestionCount)
 		if err != nil {
 			T.Logger.Error(err.Error())
 			return nil, err
