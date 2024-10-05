@@ -33,7 +33,7 @@ func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, er
 				INSERT INTO subject_topics(
 					id, name, subject_id, description, question_count)
 				VALUES
-					($1, $2, $3, $4)`
+					($1, $2, $3, $4, $5)`
 	_, err = T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description, count)
 	if err != nil {
 		T.Logger.Error(err.Error())
