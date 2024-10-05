@@ -64,7 +64,7 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 				INSERT INTO user_tasks(
 					id, user_id, topic_id, question_id)
 				VALUES
-					($1, $2, $3)`
+					($1, $2, $3, $4)`
 	students, err := grp.GetGroupStudents(context.Background(), &group.GroupId{Id: req.GroupId})
 	if err != nil {
 		T.Logger.Error(err.Error())
