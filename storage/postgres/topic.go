@@ -5,7 +5,6 @@ import (
 	"log/slog"
 	pb "question/genproto/topic"
 	"question/storage/repo"
-	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,16 +24,12 @@ func NewTopicRepo(db *sql.DB, logger *slog.Logger) repo.ITopicStorage {
 
 func (T *topicRepo) CreateTopic(req *pb.CreateTopicReq) (*pb.CreateTopicResp, error) {
 	id := uuid.NewString()
-	count, err := strconv.Atoi(req.QuestionCount)
-	if err != nil {
-		return nil, err
-	}
 	query := `
 				INSERT INTO subject_topics(
 					id, name, subject_id, description, question_count)
 				VALUES
 					($1, $2, $3, $4, $5)`
-	_, err = T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description, count)
+	_, err := T.DB.Exec(query, id, req.Name, req.SubjectId, req.Description, req.QuestionCount)
 	if err != nil {
 		T.Logger.Error(err.Error())
 		return nil, err
