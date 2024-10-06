@@ -109,7 +109,7 @@ func (T *TaskRepo) DeleteTask(req *pb.DeleteTaskReq) (*pb.DeleteTaskResp, error)
 					FROM
 				user_tasks
 					WHERE
-				task_id = $1 AND deleted_at IS NULL`
+				id = $1 AND deleted_at IS NULL`
 	_, err := T.DB.Exec(query, req.TaskId)
 	if err != nil {
 		T.Logger.Error(err.Error())
