@@ -40,7 +40,7 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 	}
 	query := `
 				SELECT 
-					question_count 
+					question_count
 				FROM
 					subject_topics
 				WHERE
