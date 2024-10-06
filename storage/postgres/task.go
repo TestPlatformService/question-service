@@ -77,7 +77,7 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 			return nil, err
 		}
 		questions:=resp.QuestionsId
-		for i := 0; i < questionCount; i++ {
+		for i := 0; i < len(questions); i++ {
 			_, err = tr.Exec(query2, id, student.Id, req.TopicId, questions[i])
 			if err != nil {
 				T.Logger.Error(err.Error())
