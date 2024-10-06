@@ -65,7 +65,7 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 	}
 	query2 := `
 				INSERT INTO user_tasks(
-					id, user_id, topic_id, question_id)
+					id, hh_id, topic_id, question_id)
 				VALUES
 					($1, $2, $3, $4)`
 	students, err := grp.GetGroupStudents(context.Background(), &group.GroupId{Id: req.GroupId})
@@ -85,7 +85,7 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 		}
 		for _, questionId := range questions {
 			id := uuid.NewString() // Har bir yozuv uchun yangi ID
-			_, err = tr.Exec(query2, id, student.Id, req.TopicId, questionId)
+			_, err = tr.Exec(query2, id, student.HhId, req.TopicId, questionId)
 			if err != nil {
 				T.Logger.Error(err.Error())
 				return nil, err // Bu yerda xato qaytarilganda tranzaksiya bekor qilinmaydi
@@ -134,36 +134,38 @@ func (T *TaskRepo) DeleteTask(req *pb.DeleteTaskReq) (*pb.DeleteTaskResp, error)
 	}, nil
 }
 
-func (T *TaskRepo) GetTask(req *pb.GetTaskReq) ([]string, error) {
+func (T *TaskRepo) GetTask(req *pb.GetTaskReq) ([]string, *string, error) {
 	var questionIds = []string{}
+	var TaskId string
 	query := `
 				SELECT 
-					question_id
+					question_id, id
 				FROM
 					user_tasks
 				WHERE
-					id = $1 AND user_id = $2 AND topic_id = $3 AND deleted_at IS NULL`
+					hh_id = $1 AND topic_id = $2 AND deleted_at IS NULL`
 	tr, err := T.DB.Begin()
 	if err != nil {
 		T.Logger.Error(err.Error())
 		tr.Rollback()
-		return nil, err
+		return nil, nil, err
 	}
-	rows, err := tr.Query(query, req.TaskId, req.UserId, req.TopicId)
+
+	rows, err := tr.Query(query, req.UserId, req.TopicId)
 	if err != nil {
 		T.Logger.Error(err.Error())
 		tr.Rollback()
-		return nil, err
+		return nil, nil, err
 	}
 	for rows.Next() {
 		var questionId string
-		err = rows.Scan(&questionId)
+		err = rows.Scan(&questionId, &TaskId)
 		if err != nil {
 			T.Logger.Error(err.Error())
 			tr.Rollback()
-			return nil, err
+			return nil, nil, err
 		}
 		questionIds = append(questionIds, questionId)
 	}
-	return questionIds, nil
+	return questionIds, &TaskId, nil
 }

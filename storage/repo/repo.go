@@ -69,5 +69,5 @@ type ITestCaseStorage interface {
 type ITaskStorage interface {
 	CreateTask(req *pb4.CreateTaskReq) (*pb4.CreateTaskResp, error)
 	DeleteTask(req *pb4.DeleteTaskReq) (*pb4.DeleteTaskResp, error)
-	GetTask(req *pb4.GetTaskReq) ([]string, error)
+	GetTask(req *pb4.GetTaskReq) ([]string, *string,  error)
 }
