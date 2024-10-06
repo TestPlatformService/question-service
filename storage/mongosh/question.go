@@ -75,8 +75,12 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 }
 
 func (repo *QuestionRepository) GetQuestion(ctx context.Context, id *pb.QuestionId) (*pb.GetQuestionResponse, error) {
+	objectID, err := primitive.ObjectIDFromHex(id.Id)
+	if err != nil {
+		return nil, err // return an error if the ID is not valid
+	}
 	var question Question
-	err := repo.Coll.FindOne(ctx, bson.M{"_id": id.Id, "deleted_at": bson.M{"$exists": false}}).Decode(&question)
+	err = repo.Coll.FindOne(ctx, bson.M{"_id": objectID, "deleted_at": bson.M{"$exists": false}}).Decode(&question)
 	if err != nil {
 		return nil, err
 	}
