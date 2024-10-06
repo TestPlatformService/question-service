@@ -4,7 +4,6 @@ import (
 	"context"
 	pb3 "question/genproto/question"
 	pb "question/genproto/subject"
-	"question/genproto/task"
 	pb4 "question/genproto/task"
 	pb2 "question/genproto/topic"
 )
@@ -39,7 +38,8 @@ type IQuestionStorage interface {
 	UploadImageQuestion(context.Context, *pb3.UploadImageQuestionRequest) (*pb3.Void, error)
 	DeleteImageQuestion(context.Context, *pb3.DeleteImageQuestionRequest) (*pb3.Void, error)
 	IsQuestionExist(context.Context, *pb3.QuestionId) (*pb3.Void, error)
-	GetQuestionsByIds(ctx context.Context, ids []string) ([]*task.Question, error)
+	GetQuestionsByIds(ctx context.Context, ids []string) ([]*pb4.Question, error)
+	GetQuestionRandomly(ctx context.Context, req *pb3.GetQuestionRandomlyRequest) (*pb3.GetQuestionRandomlyResponse, error)
 }
 
 type IInputStorage interface {
