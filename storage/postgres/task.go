@@ -55,14 +55,6 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 		tr.Rollback()
 		return nil, err
 	}
-	query = `
-				SELECT 
-					question_id
-				FROM 
-					topic_questions
-				ORDER BY 
-					RANDOM()
-				LIMIT $1`
 	query2 := `
 				INSERT INTO user_tasks(
 					id, user_id, topic_id, question_id)
