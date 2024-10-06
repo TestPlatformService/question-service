@@ -105,20 +105,32 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 
 func (T *TaskRepo) DeleteTask(req *pb.DeleteTaskReq) (*pb.DeleteTaskResp, error) {
 	query := `
-				DELETE
-					FROM
-				user_tasks
-					WHERE
-				id = $1 AND deleted_at IS NULL`
-	_, err := T.DB.Exec(query, req.TaskId)
+        UPDATE user_tasks
+        SET deleted_at = $1
+        WHERE id = $2 AND deleted_at IS NULL
+    `
+
+	result, err := T.DB.Exec(query, time.Now(), req.TaskId)
 	if err != nil {
-		T.Logger.Error(err.Error())
-		return &pb.DeleteTaskResp{
-			Status: "Task o'chirilmadi",
-		}, err
+		T.Logger.Error(fmt.Sprintf("Error deleting task: %s", err))
+		return nil, err
 	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		T.Logger.Error(fmt.Sprintf("Error getting rows affected: %s", err))
+		return nil, err
+	}
+
+	var status string
+	if rowsAffected == 0 {
+		status = "Task not found or already deleted"
+	} else {
+		status = "Task successfully deleted"
+	}
+
 	return &pb.DeleteTaskResp{
-		Status: "Task muvaffaqiyatli o'chirildi",
+		Status: status,
 	}, nil
 }
 
