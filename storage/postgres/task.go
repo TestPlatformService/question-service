@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log/slog"
 	"question/genproto/group"
+	"question/genproto/question"
 	pb "question/genproto/task"
 	"question/pkg"
 	"question/storage/repo"
@@ -67,23 +68,15 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 		return nil, err
 	}
 	for _, student := range students.Students {
-		questions := []string{}
-		rows, err := tr.Query(query, questionCount)
-		if err != nil {
+		resp, err := T.mng.GetQuestionRandomly(context.Background(), &question.GetQuestionRandomlyRequest{
+			TopicId: req.TopicId,
+			Count: int64(questionCount),
+		})
+		if err != nil{
 			T.Logger.Error(err.Error())
-			tr.Rollback()
 			return nil, err
 		}
-		for rows.Next() {
-			var question string
-			err = rows.Scan(&question)
-			if err != nil {
-				T.Logger.Error(err.Error())
-				tr.Rollback()
-				return nil, err
-			}
-			questions = append(questions, question)
-		}
+		questions:=resp.QuestionsId
 		for i := 0; i < questionCount; i++ {
 			_, err = tr.Exec(query2, id, student.Id, req.TopicId, questions[i])
 			if err != nil {
