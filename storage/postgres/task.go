@@ -3,8 +3,10 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log/slog"
 	"question/genproto/group"
+	"question/genproto/question"
 	pb "question/genproto/task"
 	"question/pkg"
 	"question/storage/repo"
@@ -55,14 +57,6 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 		tr.Rollback()
 		return nil, err
 	}
-	query = `
-				SELECT 
-					question_id
-				FROM 
-					topic_questions
-				ORDER BY 
-					RANDOM()
-				LIMIT $1`
 	query2 := `
 				INSERT INTO user_tasks(
 					id, user_id, topic_id, question_id)
@@ -75,25 +69,18 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 		return nil, err
 	}
 	for _, student := range students.Students {
-		questions := []string{}
-		rows, err := tr.Query(query, questionCount)
+		resp, err := T.mng.GetQuestionRandomly(context.Background(), &question.GetQuestionRandomlyRequest{
+			TopicId: req.TopicId,
+			Count:   int64(questionCount),
+		})
 		if err != nil {
 			T.Logger.Error(err.Error())
-			tr.Rollback()
 			return nil, err
 		}
-		for rows.Next() {
-			var question string
-			err = rows.Scan(&question)
-			if err != nil {
-				T.Logger.Error(err.Error())
-				tr.Rollback()
-				return nil, err
-			}
-			questions = append(questions, question)
-		}
-		for i := 0; i < questionCount; i++ {
+		questions := resp.QuestionsId
+		for i := 0; i < len(questions); i++ {
 			_, err = tr.Exec(query2, id, student.Id, req.TopicId, questions[i])
+			T.Logger.Info(fmt.Sprintf("Id:", questions[i]))
 			if err != nil {
 				T.Logger.Error(err.Error())
 				tr.Rollback()

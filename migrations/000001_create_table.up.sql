@@ -24,7 +24,7 @@ CREATE TABLE subject_topics (
 CREATE TABLE user_tasks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,     
-    question_id UUID NOT NULL,    
+    question_id TEXT NOT NULL,    
     topic_id UUID REFERENCES subject_topics(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
