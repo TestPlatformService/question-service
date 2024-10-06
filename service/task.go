@@ -40,7 +40,7 @@ func (T *TaskService) DeleteTask(ctx context.Context, req *pb.DeleteTaskReq) (*p
 }
 
 func (T *TaskService) GetTask(ctx context.Context, req *pb.GetTaskReq) (*pb.GetTaskResp, error) {
-	questionsId, err := T.storage.Task().GetTask(req)
+	questionsId, taskId, err := T.storage.Task().GetTask(req)
 	if err != nil {
 		T.logger.Error(fmt.Sprintf("Savollarning idisini olishda xatolik: %v", err))
 		return nil, err
@@ -51,7 +51,7 @@ func (T *TaskService) GetTask(ctx context.Context, req *pb.GetTaskReq) (*pb.GetT
 		return nil, err
 	}
 	return &pb.GetTaskResp{
-		TaskId:    req.TaskId,
+		TaskId:    *taskId,
 		Questions: questions,
 	}, nil
 }
