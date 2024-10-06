@@ -46,16 +46,16 @@ func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.Crea
 		TopicID:     req.TopicId,
 		Type:        req.Type,
 		Name:        req.Name,
-		Number:      0,
+		Number:      req.Number,
 		Difficulty:  req.Difficulty,
 		Description: req.Description,
 		Image:       req.Image,
 		Constraints: req.Constrains,
 		InputInfo:   req.InputInfo,
 		OutputInfo:  req.OutputInfo,
-		Language:    req.Language,    // New field
-		TimeLimit:   0,   // New field
-		MemoryLimit: 0, // New field
+		Language:    req.Language, // New field
+		TimeLimit:   0,            // New field
+		MemoryLimit: 0,            // New field
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -337,4 +337,3 @@ func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []str
 
 	return questions, nil // Savollar ro'yxatini qaytaramiz
 }
-
