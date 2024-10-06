@@ -44,7 +44,7 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 				FROM
 					subject_topics
 				WHERE
-					topic_id = $1 AND deleted_at IS NULL`
+					id = $1 AND deleted_at IS NULL`
 	var questionCount int
 	err = tr.QueryRow(query, req.TopicId).Scan(&questionCount)
 	if err != nil {
