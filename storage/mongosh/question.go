@@ -2,6 +2,7 @@ package mongosh
 
 import (
 	"context"
+	"math/rand/v2"
 	pb "question/genproto/question"
 	"question/genproto/task"
 	"question/storage/repo"
@@ -336,4 +337,53 @@ func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []str
 	}
 
 	return questions, nil // Savollar ro'yxatini qaytaramiz
+}
+
+func (repo *QuestionRepository) GetQuestionRandomly(ctx context.Context, req *pb.GetQuestionRandomlyRequest) (*pb.GetQuestionRandomlyResponse, error) {
+	filter := bson.M{
+		"topic_id":   req.TopicId,
+		"deleted_at": bson.M{"$exists": false},
+	}
+
+	// Avval umumiy hujjatlar sonini aniqlaymiz
+	totalCount, err := repo.Coll.CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	if totalCount == 0 {
+		return &pb.GetQuestionRandomlyResponse{QuestionsId: []*pb.QuestionId{}}, nil
+	}
+
+	// Agar so'ralgan miqdor mavjud hujjatlar sonidan ko'p bo'lsa, chegaralaymiz
+	count := int(req.Count)
+	if int64(count) > totalCount {
+		count = int(totalCount)
+	}
+
+	// Tasodifiy indekslarni yaratamiz
+	indexes := rand.Perm(int(totalCount))[:count]
+
+	var questionIds []*pb.QuestionId
+
+	for _, index := range indexes {
+		cursor, err := repo.Coll.Find(ctx, filter, options.Find().SetSkip(int64(index)).SetLimit(1))
+		if err != nil {
+			return nil, err
+		}
+
+		var question Question
+		if cursor.Next(ctx) {
+			if err := cursor.Decode(&question); err != nil {
+				cursor.Close(ctx)
+				return nil, err
+			}
+			questionIds = append(questionIds, &pb.QuestionId{Id: question.ID.Hex()})
+		}
+		cursor.Close(ctx)
+	}
+
+	return &pb.GetQuestionRandomlyResponse{
+		QuestionsId: questionIds,
+	}, nil
 }

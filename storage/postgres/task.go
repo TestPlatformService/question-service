@@ -7,6 +7,7 @@ import (
 	"question/genproto/group"
 	pb "question/genproto/task"
 	"question/pkg"
+	"question/storage/repo"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,12 +16,14 @@ import (
 type TaskRepo struct {
 	DB     *sql.DB
 	Logger *slog.Logger
+	mng    repo.IQuestionStorage
 }
 
-func NewTaskService(db *sql.DB, log *slog.Logger) *TaskRepo {
+func NewTaskService(db *sql.DB, log *slog.Logger, mongo repo.IQuestionStorage) *TaskRepo {
 	return &TaskRepo{
 		DB:     db,
 		Logger: log,
+		mng:    mongo,
 	}
 }
 

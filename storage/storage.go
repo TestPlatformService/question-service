@@ -22,15 +22,15 @@ type Istorage interface {
 }
 
 type StoragePro struct {
-	Mdb *mongo.Database
-	PDB *sql.DB
+	Mdb    *mongo.Database
+	PDB    *sql.DB
 	Logger *slog.Logger
 }
 
 func NewStoragePro(mdb *mongo.Database, pdb *sql.DB, logger *slog.Logger) Istorage {
 	return &StoragePro{
-		Mdb: mdb,
-		PDB: pdb,
+		Mdb:    mdb,
+		PDB:    pdb,
 		Logger: logger,
 	}
 }
@@ -60,5 +60,5 @@ func (pro *StoragePro) TestCase() repo.ITestCaseStorage {
 }
 
 func (pro *StoragePro) Task() repo.ITaskStorage {
-	return postgres.NewTaskService(pro.PDB, pro.Logger)
+	return postgres.NewTaskService(pro.PDB, pro.Logger, pro.Question())
 }
