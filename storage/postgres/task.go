@@ -40,9 +40,15 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 	tr, err := T.DB.Begin()
 	if err != nil {
 		T.Logger.Error(err.Error())
-		tr.Rollback()
 		return nil, err
 	}
+	defer func() {
+		if err != nil {
+			tr.Rollback()
+		} else {
+			tr.Commit()
+		}
+	}()
 	query := `
 				SELECT 
 					question_count
@@ -75,17 +81,21 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 		})
 		if err != nil {
 			T.Logger.Error(err.Error())
-			return nil, err
+			return nil, err // Bu yerda xato qaytarilganda tranzaksiya bekor qilinmaydi
 		}
-		for i := 0; i < len(questions); i++ {
-			_, err = tr.Exec(query2, id, student.Id, req.TopicId, questions[i])
-			T.Logger.Info(fmt.Sprintf("Id::::::::::::", questions[i]))
+		for _, questionId := range questions {
+			id := uuid.NewString() // Har bir yozuv uchun yangi ID
+			_, err = tr.Exec(query2, id, student.Id, req.TopicId, questionId)
 			if err != nil {
 				T.Logger.Error(err.Error())
-				tr.Rollback()
-				return nil, err
+				return nil, err // Bu yerda xato qaytarilganda tranzaksiya bekor qilinmaydi
 			}
+			T.Logger.Info(fmt.Sprintf("QuestionId: %s", questionId))
 		}
+	}
+	if err = tr.Commit(); err != nil {
+		T.Logger.Error(err.Error())
+		return nil, err
 	}
 	return &pb.CreateTaskResp{
 		TaskId:    id,
