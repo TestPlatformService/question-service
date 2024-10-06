@@ -3,6 +3,8 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"log"
 	"log/slog"
 	"question/genproto/group"
 	"question/genproto/question"
@@ -79,6 +81,7 @@ func (T *TaskRepo) CreateTask(req *pb.CreateTaskReq) (*pb.CreateTaskResp, error)
 		questions:=resp.QuestionsId
 		for i := 0; i < len(questions); i++ {
 			_, err = tr.Exec(query2, id, student.Id, req.TopicId, *questions[i])
+			T.Logger.Info(fmt.Sprintf("Id::::::::::::", questions[i],      *questions[i]))
 			if err != nil {
 				T.Logger.Error(err.Error())
 				tr.Rollback()
