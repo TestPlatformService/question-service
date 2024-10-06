@@ -339,7 +339,7 @@ func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []str
 	return questions, nil // Savollar ro'yxatini qaytaramiz
 }
 
-func (repo *QuestionRepository) GetQuestionRandomly(ctx context.Context, req *pb.GetQuestionRandomlyRequest) (pb.GetQuestionRandomlyResponse, error) {
+func (repo *QuestionRepository) GetQuestionRandomly(ctx context.Context, req *pb.GetQuestionRandomlyRequest) ([]string, error) {
 	filter := bson.M{
 		"topic_id":   req.TopicId,
 		"deleted_at": bson.M{"$exists": false},
@@ -348,11 +348,11 @@ func (repo *QuestionRepository) GetQuestionRandomly(ctx context.Context, req *pb
 	// Avval umumiy hujjatlar sonini aniqlaymiz
 	totalCount, err := repo.Coll.CountDocuments(ctx, filter)
 	if err != nil {
-		return pb.GetQuestionRandomlyResponse{}, err
+		return nil, err
 	}
 
 	if totalCount == 0 {
-		return pb.GetQuestionRandomlyResponse{QuestionsId: []*pb.QuestionId{}}, nil
+		return []string{}, nil
 	}
 
 	// Agar so'ralgan miqdor mavjud hujjatlar sonidan ko'p bo'lsa, chegaralaymiz
@@ -364,26 +364,24 @@ func (repo *QuestionRepository) GetQuestionRandomly(ctx context.Context, req *pb
 	// Tasodifiy indekslarni yaratamiz
 	indexes := rand.Perm(int(totalCount))[:count]
 
-	var questionIds []*pb.QuestionId
+	var questionIds []string
 
 	for _, index := range indexes {
 		cursor, err := repo.Coll.Find(ctx, filter, options.Find().SetSkip(int64(index)).SetLimit(1))
 		if err != nil {
-			return pb.GetQuestionRandomlyResponse{}, err
+			return nil, err
 		}
 
 		var question Question
 		if cursor.Next(ctx) {
 			if err := cursor.Decode(&question); err != nil {
 				cursor.Close(ctx)
-				return pb.GetQuestionRandomlyResponse{}, err
+				return nil, err
 			}
-			questionIds = append(questionIds, &pb.QuestionId{Id: question.ID.Hex()})
+			questionIds = append(questionIds, question.ID.Hex())
 		}
 		cursor.Close(ctx)
 	}
 
-	return pb.GetQuestionRandomlyResponse{
-		QuestionsId: questionIds,
-	}, nil
+	return questionIds, nil
 }
