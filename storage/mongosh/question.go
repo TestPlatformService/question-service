@@ -2,6 +2,7 @@ package mongosh
 
 import (
 	"context"
+	"log/slog"
 	"math/rand/v2"
 	pb "question/genproto/question"
 	"question/genproto/task"
@@ -36,10 +37,14 @@ type Question struct {
 
 type QuestionRepository struct {
 	Coll *mongo.Collection
+	Logger *slog.Logger
 }
 
-func NewQuestionRepository(db *mongo.Database) repo.IQuestionStorage {
-	return &QuestionRepository{Coll: db.Collection("question")}
+func NewQuestionRepository(db *mongo.Database, logger *slog.Logger) repo.IQuestionStorage {
+	return &QuestionRepository{
+		Coll: db.Collection("question"),
+		Logger: logger,
+	}
 }
 
 func (repo *QuestionRepository) CreateQuestion(ctx context.Context, req *pb.CreateQuestionRequest) (*pb.QuestionId, error) {

@@ -36,7 +36,7 @@ func NewStoragePro(mdb *mongo.Database, pdb *sql.DB, logger *slog.Logger) Istora
 }
 
 func (pro *StoragePro) Question() repo.IQuestionStorage {
-	return mongosh.NewQuestionRepository(pro.Mdb)
+	return mongosh.NewQuestionRepository(pro.Mdb, pro.Logger)
 }
 
 func (pro *StoragePro) Subject() repo.ISubjectStorage {
