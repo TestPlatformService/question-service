@@ -135,7 +135,7 @@ func (T *TaskRepo) DeleteTask(req *pb.DeleteTaskReq) (*pb.DeleteTaskResp, error)
 }
 
 func (T *TaskRepo) GetTask(req *pb.GetTaskReq) ([]string, *string, error) {
-	var questionIds = []string{}
+	var questionIds []string
 	var TaskId string
 	query := `
 				SELECT 
@@ -144,28 +144,48 @@ func (T *TaskRepo) GetTask(req *pb.GetTaskReq) ([]string, *string, error) {
 					user_tasks
 				WHERE
 					hh_id = $1 AND topic_id = $2 AND deleted_at IS NULL`
+	
 	tr, err := T.DB.Begin()
 	if err != nil {
-		T.Logger.Error(err.Error())
-		tr.Rollback()
+		T.Logger.Error("Error starting transaction: " + err.Error())
 		return nil, nil, err
 	}
+	defer func() {
+		if err != nil {
+			T.Logger.Error("Rolling back transaction: " + err.Error())
+			tr.Rollback()
+		}
+	}()
 
 	rows, err := tr.Query(query, req.UserId, req.TopicId)
 	if err != nil {
-		T.Logger.Error(err.Error())
-		tr.Rollback()
+		T.Logger.Error("Error querying tasks: " + err.Error())
 		return nil, nil, err
 	}
+	defer rows.Close() // Kursorni yopish
+
 	for rows.Next() {
 		var questionId string
 		err = rows.Scan(&questionId, &TaskId)
 		if err != nil {
-			T.Logger.Error(err.Error())
-			tr.Rollback()
+			T.Logger.Error("Error scanning row: " + err.Error())
 			return nil, nil, err
 		}
 		questionIds = append(questionIds, questionId)
 	}
+
+	// Check if TaskId is empty
+	if TaskId == "" {
+		T.Logger.Warn("TaskId is empty")
+		return questionIds, nil, nil
+	}
+
+	// Transactionni tasdiqlash
+	if err := tr.Commit(); err != nil {
+		T.Logger.Error("Error committing transaction: " + err.Error())
+		return nil, nil, err
+	}
+
 	return questionIds, &TaskId, nil
 }
+
