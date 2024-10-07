@@ -303,6 +303,7 @@ func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []str
 	for _, id := range ids {
 		oid, err := primitive.ObjectIDFromHex(id)
 		if err != nil {
+			repo.Logger.Error(err.Error())
 			return nil, err // Agar ID konvertatsiya qilishda xato bo'lsa, xato qaytaramiz
 		}
 		objectIDs = append(objectIDs, oid)
@@ -311,6 +312,7 @@ func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []str
 	// MongoDB dan savollarni olish
 	cursor, err := repo.Coll.Find(ctx, bson.M{"_id": bson.M{"$in": objectIDs}})
 	if err != nil {
+		repo.Logger.Error(err.Error())
 		return nil, err // Agar so'rovda xato bo'lsa, xato qaytaramiz
 	}
 	defer cursor.Close(ctx)
@@ -319,6 +321,7 @@ func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []str
 	for cursor.Next(ctx) {
 		var question Question
 		if err := cursor.Decode(&question); err != nil {
+			repo.Logger.Error(err.Error())
 			return nil, err // Agar dekodlashda xato bo'lsa, xato qaytaramiz
 		}
 
@@ -342,6 +345,7 @@ func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []str
 	}
 
 	if err := cursor.Err(); err != nil {
+		repo.Logger.Error(err.Error())
 		return nil, err // Agar kursor ishlashida xato bo'lsa, xato qaytaramiz
 	}
 
