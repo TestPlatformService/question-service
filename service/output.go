@@ -75,3 +75,14 @@ func (s *OutputService) DeleteQuestionOutput(ctx context.Context, req *pb.Delete
 	s.Logger.Info("DeleteQuestionOutput finished succesfully")
 	return res, nil
 }
+
+func (s *OutputService) GetQUestionOutPutByInputId(ctx context.Context, req *pb.GetQUestionOutPutByInputIdRequest) (*pb.GetQUestionOutPutByInputIdRes, error) {
+	s.Logger.Info("GetQuestionOutputByInputId rpc method is started")
+	res, err := s.Output.Output().GetQuestionOutputByInputId(ctx, req)
+	if err != nil {
+		s.Logger.Error(err.Error())
+		return nil, err
+	}
+	s.Logger.Info("GetQuestionOutputByInputId finished succesfully")
+	return res, nil
+}

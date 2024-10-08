@@ -132,3 +132,36 @@ func (repo *OutputRepository) DeleteQuestionOutput(ctx context.Context, req *pb.
 
 	return &pb.Void{}, nil
 }
+
+func (repo *OutputRepository) GetQuestionOutputByInputId(ctx context.Context, req *pb.GetQUestionOutPutByInputIdRequest) (*pb.GetQUestionOutPutByInputIdRes, error) {
+	filter := bson.M{"input_id": req.InputId}
+
+	cursor, err := repo.Coll.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var questionOutputs []*pb.GetQuestionOutputResponse
+	for cursor.Next(ctx) {
+		var output QuestionOutput
+		if err := cursor.Decode(&output); err != nil {
+			return nil, err
+		}
+
+		questionOutputs = append(questionOutputs, &pb.GetQuestionOutputResponse{
+			Id:         output.ID.Hex(),
+			QuestionId: output.QuestionID,
+			InputId:    output.InputID,
+			Answer:     output.Answer,
+		})
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return &pb.GetQUestionOutPutByInputIdRes{
+		QuestionOutputs: questionOutputs,
+	}, nil
+}

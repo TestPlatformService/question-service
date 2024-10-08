@@ -56,6 +56,7 @@ type IOutputStorage interface {
 	GetAllQuestionOutputsByQuestionId(context.Context, *pb3.GetAllQuestionOutputsByQuestionIdRequest) (*pb3.GetAllQuestionOutputsByQuestionIdResponse, error)
 	UpdateQuestionOutput(context.Context, *pb3.UpdateQuestionOutputRequest) (*pb3.Void, error)
 	DeleteQuestionOutput(context.Context, *pb3.DeleteQuestionOutputRequest) (*pb3.Void, error)
+	GetQuestionOutputByInputId(context.Context, *pb3.GetQUestionOutPutByInputIdRequest) (*pb3.GetQUestionOutPutByInputIdRes, error)
 }
 
 type ITestCaseStorage interface {
@@ -69,5 +70,5 @@ type ITestCaseStorage interface {
 type ITaskStorage interface {
 	CreateTask(req *pb4.CreateTaskReq) (*pb4.CreateTaskResp, error)
 	DeleteTask(req *pb4.DeleteTaskReq) (*pb4.DeleteTaskResp, error)
-	GetTask(req *pb4.GetTaskReq) ([]string, *string,  error)
+	GetTask(req *pb4.GetTaskReq) ([]string, *string, error)
 }
