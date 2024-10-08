@@ -358,7 +358,6 @@ func (repo *QuestionRepository) GetQuestionRandomly(ctx context.Context, req *pb
 		"deleted_at": bson.M{"$exists": false},
 	}
 
-	// Avval umumiy hujjatlar sonini aniqlaymiz
 	totalCount, err := repo.Coll.CountDocuments(ctx, filter)
 	if err != nil {
 		return nil, err
@@ -368,32 +367,33 @@ func (repo *QuestionRepository) GetQuestionRandomly(ctx context.Context, req *pb
 		return []string{}, nil
 	}
 
-	// Agar so'ralgan miqdor mavjud hujjatlar sonidan ko'p bo'lsa, chegaralaymiz
 	count := int(req.Count)
 	if int64(count) > totalCount {
 		count = int(totalCount)
 	}
 
-	// Tasodifiy indekslarni yaratamiz
-	indexes := rand.Perm(int(totalCount))[:count]
+	cursor, err := repo.Coll.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
 
-	var questionIds []string
-
-	for _, index := range indexes {
-		cursor, err := repo.Coll.Find(ctx, filter, options.Find().SetSkip(int64(index)).SetLimit(1))
-		if err != nil {
+	var questions []Question
+	for cursor.Next(ctx) {
+		var question Question
+		if err := cursor.Decode(&question); err != nil {
 			return nil, err
 		}
+		questions = append(questions, question)
+	}
 
-		var question Question
-		if cursor.Next(ctx) {
-			if err := cursor.Decode(&question); err != nil {
-				cursor.Close(ctx)
-				return nil, err
-			}
-			questionIds = append(questionIds, question.ID.Hex())
-		}
-		cursor.Close(ctx)
+	rand.Shuffle(len(questions), func(i, j int) {
+		questions[i], questions[j] = questions[j], questions[i]
+	})
+
+	var questionIds []string
+	for i := 0; i < count; i++ {
+		questionIds = append(questionIds, questions[i].ID.Hex())
 	}
 
 	return questionIds, nil
