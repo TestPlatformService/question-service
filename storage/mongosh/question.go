@@ -36,13 +36,13 @@ type Question struct {
 }
 
 type QuestionRepository struct {
-	Coll *mongo.Collection
+	Coll   *mongo.Collection
 	Logger *slog.Logger
 }
 
 func NewQuestionRepository(db *mongo.Database, logger *slog.Logger) repo.IQuestionStorage {
 	return &QuestionRepository{
-		Coll: db.Collection("question"),
+		Coll:   db.Collection("question"),
 		Logger: logger,
 	}
 }
@@ -300,7 +300,6 @@ func (repo *QuestionRepository) IsQuestionExist(ctx context.Context, id *pb.Ques
 
 func (repo *QuestionRepository) GetQuestionsByIds(ctx context.Context, ids []string) ([]*task.Question, error) {
 	var objectIDs []primitive.ObjectID
-	repo.Logger.Info("IDS: ", ids)
 	for _, id := range ids {
 		oid, err := primitive.ObjectIDFromHex(id)
 		if err != nil {
